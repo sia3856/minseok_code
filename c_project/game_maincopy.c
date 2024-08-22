@@ -44,7 +44,7 @@ typedef struct player Player;
 typedef struct monster Monster;
 
 int getch();
-void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc);
+void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc, int *money);
 int map_move(int xlen, int ylen, int *x, int *y, int *p_loc);
 void map_print(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc);
 
@@ -64,7 +64,7 @@ int main(void)
     
     int map[z_len][y_len][x_len] = {
 {{0,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	20,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6},
-{0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	19,	6,	6,	6,	20,	6,	6,	6,	6,	8,	6,	6,	6,	6,	6,	6,	20,	6,	6,	6,	6},
+{0,	0,	0,	0,	18,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	19,	6,	6,	6,	20,	6,	6,	6,	6,	8,	6,	6,	6,	6,	6,	6,	20,	6,	6,	6,	6},
 {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	19,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	8,	6,	6,	6,	6,	6},
 {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	26,	21,	21,	19,	19,	6,	6,	6,	6,	6,	6,	8,	6,	6,	6,	6,	6,	6,	6,	6},
 {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6},
@@ -448,8 +448,7 @@ int main(void)
 {24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	0,	0,	0,	-3,	0,	0,	0,	-3,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	24,	24,	24,	1,	24,	24,	24,	24,	24,	24,	24,	24,	24,	1,	24},
 {24,	24,	24,	24,	24,	12,	24,	24,	24,	24,	24,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	24,	24,	24,	24,	24,	24,	24,	1,	24,	24,	24,	1,	24,	24,	24},
 {24,	24,	12,	24,	24,	24,	24,	12,	24,	24,	24,	24,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	24,	24,	24,	24,	12,	24,	24,	24,	24,	24,	24,	24,	24,	27,	27,	27},
-{24,	24,	24,	24,	12,	24,	24,	24,	24,	24,	24,	24,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	24,	24,	24,	24,	24,	24,	24,	24,	1,	24,	24,	24,	27,	27,	1,	27,	27},
-{24,	24,	24,	24,	24,	24,	24,	24,	24,	12,	24,	24,	24,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	24,	24,	24,	24,	24,	12,	24,	24,	1,	24,	24,	24,	24,	1,	27,	27,	27,	1,	27},
+{24,	24,	24,	24,	12,	24,	24,	24,	24,	24,4,	24,	24,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	24,	24,	24,	24,	24,	12,	24,	24,	1,	24,	24,	24,	24,	1,	27,	27,	27,	1,	27},
 {24,	24,	24,	24,	24,	12,	24,	12,	24,	24,	24,	24,	24,	24,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	24,	24,	24,	24,	1,	24,	24,	24,	1,	24,	24,	24,	24,	27,	27,	27,	27,	27,	27,	27},
 {24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	24,	24,	24,	24,	24,	1,	24,	24,	12,	24,	24,	24,	24,	27,	27,	1,	27,	27,	27,	27,	27,	27},
 {24,	24,	24,	12,	24,	24,	24,	24,	24,	24,	24,	12,	24,	24,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	24,	24,	24,	1,	24,	24,	12,	24,	12,	24,	24,	24,	24,	24,	24,	1,	27,	27,	27,	27,	1,	27,	1,	27,	27},
@@ -498,21 +497,47 @@ int main(void)
     // 0: 마을 // 1 ~ 7: 던전1 ~ 던전7s
     pp_loc = 0;
 
+    int money = 10000;
+    int slot_play = 0;
+    int prize1 = 0, prize2 = 0, prize3 = 0, prize4 = 0, prize5 = 0, prize6 = 0;
+
     while (1)
     {  
+        system("clear");
         monster_make(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, &pp_loc);
 
         pp_loc_x = loc_x;
         pp_loc_y = loc_y;
-
-        int money = 10000;
-        int slot_play = 0;
-        int prize1 = 0, prize2 = 0, prize3 = 0, prize4 = 0, prize5 = 0, prize6 = 0;
+        pp_loc = present_loc;
 
         
 
-        pp_loc = present_loc;
+        int meet_check = 0;
+        if (present_loc != 0)
+        {
+            
+            for (y = 0; y < y_len; y++)
+            {
+                for (x = 0; x < x_len; x++)
+                {
+                    if (map[present_loc][y][x] > -10 && map[present_loc][y][x] < -4)
+                    {
+                        printf("현재 y좌표 : %d  x좌표 : %d\n", y, x);
+                        printf("현재 플레이어 y좌표 : %d  x좌표 : %d\n", loc_y, loc_x);
+                        if (loc_y == y && loc_x == x)
+                        {
+                            monster_meet(map, mon_list, &player, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, x_len, y_len);
+                            meet_check = 1;
+                            break;
+                        }
+                    }
+                }
+                if (meet_check == 1)
+                    break;
+            }
+        }  
 
+        
         min_x_view = loc_x - 15;
         max_x_view = loc_x + 15;
         min_y_view = loc_y - 14;
@@ -552,22 +577,20 @@ int main(void)
         }
 
         if (present_loc == 0)
-        {
+        {   
             printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
-            printf("현재 장소 : 마을\n");
+            printf(" 현재 장소 : 말하는섬 마을\n");
         }
         else
         {
-            printf("현재 장소 : 던전 %d 층\n", present_loc);
             printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            printf(" 현재 장소 : 던전 %d 층\n", present_loc);
         }
-        player_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc);
-
-        monster_meet(map, mon_list, &player, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, x_len, y_len);
-
+        player_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, &money);
         
         map_move(x_len, y_len, &loc_x, &loc_y, &present_loc);
 
+        
         for (y = 0; y < y_len; y++)
         {
             for (x = 0; x < x_len; x++)
@@ -581,31 +604,33 @@ int main(void)
                 }
             }
         }
-        printf("최종 결과 - 잔액: %d원\n", money);
-        printf("1등: %d번, 2등: %d번, 3등: %d번, 4등: %d번, 5등: %d번, 6등: %d번\n", prize1, prize2, prize3, prize4, prize5, prize6);
-        printf("총 도박 횟수: %d \n", slot_play);
+        
+                
+        //map[*p_loc][yy][xx] == -5 || map[*p_loc][yy][xx] == -6 || map[*p_loc][yy][xx] == -7 || map[*p_loc][yy][xx] == -8 || map[*p_loc][yy][xx] == -9
+        //map[present_loc][y][x] > -10 && map[present_loc][y][x] < -4
+        
 
-
-        system("clear");
+        
     }
 
     return 0;
 }
 
 
-void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc)
+void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc, int *money)
 {
     int temp, temp1, temp2, temp3;
 
 
     char move = 0;
 
+    printf(" 좌표(x,y)(%d,%d)\n", *x, *y);
+    printf("      🅆                                               이름 : 복이     직업 : 전설의 용사  \n");
+    printf("      ⬆    \n");
+    printf(" 🄰 ⬅     ⮕ 🄳                                            🄸  : 가방       🄾  : 스테이터스\n");
+    printf("      ⬇   \n");
+    printf("      🅂                                                                   돈 : %d원\n", *money);
     printf("\n");
-    printf("   w     \n");
-    printf("   ↟    \n");
-    printf("a↞  ↠d 플레이어(x,y) %d,%d\n", *x, *y);
-    printf("   ↡    \n");
-    printf("   s     >> %c                돈 : \n", move);
     printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
     move = getch();
 
@@ -665,26 +690,26 @@ int map_move(int xlen, int ylen, int *x, int *y, int *p_loc)
 }
 
 int monster_meet(int map[][50][50], Monster mon_list[], Player *player, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int xlen, int ylen)
-{
+{   
+    system("clear");
     //map[*p_loc][yy][xx] == -5 || map[*p_loc][yy][xx] == -6 || map[*p_loc][yy][xx] == -7 || map[*p_loc][yy][xx] == -8 || map[*p_loc][yy][xx] == -9
-    int xx, yy;
-    if (*p_loc != 0)
+    int num;
+    
+    printf("몬스터를 만났다!!!!!!!!!!\n");
+    printf("몬스터 번호 : %d\n", map[*p_loc][*y][*x]);
+
+    while (1)
     {
-        for (yy = 0; yy < ylen; yy++)
+        printf("1. 기본공격  2. 아이템 사용  3. 도망\n");
+        scanf("%d", &num);
+        if (num == 3)
         {
-            for (xx = 0; xx < xlen; x++)
-            {
-                if (map[*p_loc][yy][xx] > -10 && map[*p_loc][yy][xx] < -4)
-                {
-                    if (*y == yy && *x == xx)
-                    {
-                        system("clear");
-                        printf("몬스터를 만났다!!!!!!!!!!\n");
-                    }
-                }
-            }
+            *y -= 1;
         }
-    }  
+    }
+    
+
+   
 
 }
 
@@ -780,8 +805,8 @@ void monster_make(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *
 void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int *mon, int *p1, int *p2, int *p3, int *p4, int *p5, int *p6, int *s_play)
 {
     system("clear");
-    printf("========================슬롯 머신 실행1=====================\n");
-    
+    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+    usleep(300000);
     int num = 0;
     int in_money = 0;
     int prize[5] = {10, 5, 3, 2, 1}; 
@@ -796,12 +821,33 @@ void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, i
             *y = *pp_y;
             break;
         }
-
+        printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
         printf("배팅할 금액을 입력하세요 (0을 입력하면 종료): ");
         scanf("%d", &in_money);
-
+        usleep(300000);
+        system("clear");
+        printf("1등\n");
+        usleep(300000);
+        system("clear");
+        printf("2등\n");
+        usleep(300000);
+        system("clear");
+        printf("3등\n");
+        usleep(300000);
+        system("clear");
+        printf("3등\n");
+        usleep(300000);
+        system("clear");
+        printf("4등\n");
+        usleep(300000);
+        system("clear");
         if (in_money == 0) {
+            system("clear");
             printf("게임을 종료합니다.\n");
+            printf("최종 결과 - 잔액: %d원\n", *mon);
+            printf("1등: %d번, 2등: %d번, 3등: %d번, 4등: %d번, 5등: %d번, 6등: %d번\n", *p1, *p2, *p3, *p4, *p5, *p6);
+            printf("총 도박 횟수: %d \n", *s_play);
+            sleep(2);
             *x = *pp_x;
             *y = *pp_y;
             break;

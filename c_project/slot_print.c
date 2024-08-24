@@ -33,7 +33,7 @@ int main()
     {
         select = getch();
         if( select == 73 || select == 105 )
-        p_bag_print(bag);
+            p_bag_print(bag);
     }
     return 0;
 }
@@ -330,3 +330,13 @@ int getch()
     tcsetattr(STDIN_FILENO, TCSANOW, &oldattr); // 원래의 설정으로 복구
     return c;
 }
+
+
+
+system("clear");
+        enter(10);
+        printf("마나 + 150\n");
+        if((player->mp)+150 >= player->max_mp)
+            player->mp = player->max_mp;
+        else if(player->mp < player->max_mp)
+            player->mp += 150;

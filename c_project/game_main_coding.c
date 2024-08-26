@@ -48,6 +48,7 @@ struct player
     int xp;
     int gold;
     int t_portal;
+    double e_dmg;
     struct p_skill skill_list[6];
 };
 
@@ -97,19 +98,66 @@ struct monster
     struct m_skill m_skill_list[16];
 };
 
+struct w_inf
+{
+    char name[20];
+    double dmg;
+};
+
+struct a_inf
+{
+    char name[20];
+    double dmg;
+};
+
+struct s_inf
+{
+    char name[20];
+    double dmg;
+};
+
+struct g_inf
+{
+    char name[20];
+    double dmg;
+};
+
+struct c_inf
+{
+    char name[20];
+    double dmg;
+};
+
+struct m_inf
+{
+    char name[20];
+    double dmg;
+};
+
+struct mul
+{
+    int star;
+    double mul;
+};
 typedef struct player Player;
 typedef struct monster Monster;
 typedef struct p_skill P_skill;
 typedef struct m_skill M_skill;
 typedef struct item Item;
-
+typedef struct w_inf W_inf;
+typedef struct a_inf A_inf;
+typedef struct s_inf S_inf;
+typedef struct g_inf G_inf;
+typedef struct c_inf C_inf;
+typedef struct m_inf M_inf;
+typedef struct mul Mul;
 
 int getch();
 void enter(int num);
 int buy();
 int slot_intro();
 int num_dot(int num);
-void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,  int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item);
+void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,  int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[]);
 void monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc);
 int map_move(int xlen, int ylen, int *x, int *y, int *p_loc,Item *item);
 void map_print(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc);
@@ -136,6 +184,8 @@ int lve_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
 void lv_s_up(int num, Player *player);
 int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, Player *player, int bag[bag_z][bag_y][bag_x],Item *item);
 int upgrade_item(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, Player *player, int bag[bag_z][bag_y][bag_x], Item *item, int *num1,int *num2, int *num3);
+void interface(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,  int bag[bag_z][bag_y][bag_x],Player *player,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[]);
+
 
 int main(void)
 {
@@ -548,9 +598,9 @@ int main(void)
     {24,	24,	24,	24,	24,	24,	24,	24,	24,	12,	24,	24,	24,	12,	24,	24,	24,	1,	24,	12,	24,	24,	1,	24,	24,	12,	24,	12,	24,	24,	24,	12,	24,	1,	27,	27,	27,	27,	27,	27,	27,	27,	27,	27,	27,	12,	12,	12,	12,	12},
     {24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	12,	24,	24,	24,	24,	27,	27,	27,	1,	27,	27,	1,	27,	27,	12,	12,	12,	12,	12,	12,	12,	12},
     {24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	1,	27,	27,	27,	27,	27,	27,	27,	12,	12,	12,	12,	12,	12,	12,	12,	12,	12}}};
+    
 
-
-
+    
     int copy_map[z_len][y_len][x_len];
 
     for (int z = 0; z < z_len; z++)
@@ -572,14 +622,7 @@ int main(void)
         {"아이스볼", 5, 2, 4, 100, 0, 0, 10},
         {"익스플로젼", 6, 3, 6, 150, 0, 0, 12}
     };
-    
-    //     struct m_skill
-    // {
-    //     char name[50];
-    //     int cnum;
-    //     double min_dmg;
-    //     double max_dmg;
-    // };
+        
     M_skill m_skill_list[16] = {
         {"도끼던지기", 1, 1.2, 1.5},
         {"피뿌리기", 2, 1.2, 2},
@@ -598,9 +641,61 @@ int main(void)
         {"초재생능력", 15, 0.1, 0.4},
         {"메테오", 16, 1.5, 2.5},
     };
+    
     Item item ={2,0,0,0,0,0,0,0,4,0,2,0,100};
     
-    Player player = {"복이", 10, 100, 60, 100, 100, 10, 0, 100, 0, 5000, 0, *p_skill_list};
+    Player player = {"복이", 10, 100, 60, 100, 100, 10, 0, 100, 0, 5000, 0, 10, *p_skill_list};
+    
+    W_inf w_inf[4] = {
+        {"기본검", 2},
+        {"장검", 5},
+        {"일본도", 10},
+        {"싸울아비장검",20}
+    };
+
+    A_inf a_inf[4] = {
+        {"기본갑빠", 2},
+        {"반팔갑빠", 5},
+        {"후드갑빠", 10},
+        {"용갑빠",20}
+    };
+
+    S_inf s_inf[4] = {
+        {"기본장화", 2},
+        {"슬리퍼", 5},
+        {"운동화", 10},
+        {"에어조단",20}
+    };
+
+    G_inf g_inf[4] = {
+        {"기본장갑", 2},
+        {"고무장갑", 5},
+        {"면장갑", 10},
+        {"가죽장갑",20}
+    };
+
+    C_inf c_inf[4] = {
+        {"기본망토", 2},
+        {"면망토", 5},
+        {"비단망토", 10},
+        {"방탄망토",20}
+    };
+
+    M_inf m_inf[4] = {
+        {"기본마스크", 2},
+        {"k80마스크", 5},
+        {"k94마스크", 10},
+        {"타이거마스크",20}
+    };  
+
+
+    
+    Mul mul[11] = {{0,1},{1,1.1},{2,1.2},{3,1.3},{4,1.4},{5,1.5},{6,1.6},{7,1.7},{8,1.8},{9,1.9},{10,2}};
+
+
+
+
+
     
     for(int i = 0; i < 6; i++)
     {
@@ -623,7 +718,6 @@ int main(void)
         {10, -14, "김수현", 0, 0, 50, 100, 0, 100, 300, 0, 5, 500, 1.2, 20, 20, 0, 50, 150, 2, 20, 0, 30, 0, *m_skill_list}
     };
     
-
     Monster boss_list[3] = {
         {11, -17, "바포메트", 0, 0, 50, 100, 0, 180, 450, 0, 5, 700, 1.3, 0, 0, 0, 300, 1000, 5, 20, 5, 30, 0, *m_skill_list},
         {13, -16, "이동녀크", 0, 0, 50, 100, 0, 300, 550, 0, 5, 1000, 1.6, 0, 0, 0, 500, 1000, 7, 20, 10, 30, 10, *m_skill_list},
@@ -631,7 +725,7 @@ int main(void)
     };
 
     Monster present_mon;
-
+    
     for (i = 0; i < 5; i++)
     {
         for (j = 0; j < 16; j++)
@@ -640,6 +734,7 @@ int main(void)
             (s_mon_list[i]).m_skill_list[j] = m_skill_list[j];
         }
     }
+    
     for (i = 0; i < 3; i++)
     {
         for (j = 0; j < 16; j++)
@@ -669,6 +764,9 @@ int main(void)
         system("clear");
         monster_make(map, copy_map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, &pp_loc);
         mon_death = 0;
+        pp_loc_x = loc_x;
+        pp_loc_y = loc_y;
+        pp_loc = present_loc;
         
         min_x_view = loc_x - 15;
         max_x_view = loc_x + 15;
@@ -719,7 +817,7 @@ int main(void)
             printf(" 현재 장소 : 던전 %d 층\n", present_loc);
         }
 
-        player_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, bag, &player, &s_loc_x, &s_loc_y, &s_loc_z, &item);
+        player_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, bag, &player, &s_loc_x, &s_loc_y, &s_loc_z, &item, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf);
 
         int meet_check = 0;
         //if (present_loc != 0)
@@ -773,9 +871,9 @@ int main(void)
 
         level_up(&player);
 
-        pp_loc_x = loc_x;
-        pp_loc_y = loc_y;
-        pp_loc = present_loc;
+        //pp_loc_x = loc_x;
+        //pp_loc_y = loc_y;
+        //pp_loc = present_loc;
         
         map_move(x_len, y_len, &loc_x, &loc_y, &present_loc, &item);
 
@@ -823,14 +921,18 @@ int main(void)
             }
         }  
     }
+    
     return 0;
 }
 
 
 
-void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item)
+void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[])
 {
     int temp, temp1, temp2, temp3;
+    int loc_x = *x;
+    int loc_y = *y;
+    int present_loc = *p_loc;    
 
 
     char move = 0;
@@ -882,8 +984,12 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
     {
         p_bag_print(bag,x, y,p_loc,player, s_loc_x, s_loc_y, s_loc_z,item);
     }
+    else if(move == 79 || move == 111) // O 인터페이스
+    {
+        interface(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, bag, player, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf);
+    }
 }
-  
+
 void monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc)
 {
     int y, x, mon, ran_move, i, j;
@@ -985,7 +1091,6 @@ void monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int
         }
     }
 }
-
 
 int map_move(int xlen, int ylen, int *x, int *y, int *p_loc, Item *item)
 {
@@ -1172,11 +1277,11 @@ int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
 
     if (move == 49) // 기본 공격
     {
-        p_monster->hp -= player->dmg;
+        p_monster->hp -= (player->dmg + player->e_dmg);
         
         strcpy(p_string4, "");
         strcpy(p_string1, "기본공격으로 적에게 ");
-        sprintf(p_string2, "%.1lf", player->dmg);
+        sprintf(p_string2, "%.1lf", player->dmg + player->e_dmg);
         strcpy(p_string3, " 의 데미지를 입혔습니다.");
 
         strcat(p_string4, p_string1);
@@ -1213,6 +1318,7 @@ int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
         }
     }
 }
+
 int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char m_string[], char m_string1[], char m_string2[], char m_string3[], char m_string4[], char m_string5[], char m_string6[])
 {
     int mon_rannum, i, j;
@@ -1396,8 +1502,8 @@ int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_
         }
         else if (s_choice == 49 && player->level >= (player->skill_list)[0].level_limit)
         {
-            s_max_dmg = player->dmg * (player->skill_list)[0].max_dmg;
-            s_min_dmg = player->dmg * (player->skill_list)[0].min_dmg;
+            s_max_dmg = (player->dmg + player->e_dmg)  * (player->skill_list)[0].max_dmg;
+            s_min_dmg = (player->dmg + player->e_dmg) * (player->skill_list)[0].min_dmg;
 
             skill_dmg = rand() % (s_max_dmg - s_min_dmg + 1) + s_min_dmg;
             if (player->mp >= (player->skill_list)[0].mp)
@@ -2211,7 +2317,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     if(bag[i][0][0] !=0){
                         printf("          %d : 기본검 +%d강 %d개\n\n", i, i, bag[i][0][0]);
                     }
-
+                    printf("          10 번은 ~를 입력하시오.");
                 }
                 else if (select == 50)
                 {
@@ -2220,7 +2326,8 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][1][0] !=0){
                         printf("          %d : 장검 +%d강 %d개\n\n", i, i, bag[i][1][0]);
-                    }                    
+                    }   
+                                     
                 }
                 else if (select == 51)
                 {
@@ -2229,7 +2336,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][2][0] !=0){
                         printf("          %d : 일본도 +%d강 %d개\n\n", i, i, bag[i][2][0]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 52)
@@ -2239,7 +2346,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][3][0] !=0){
                         printf("          %d : 싸울아비장검 +%d강 %d개\n\n", i, i, bag[i][3][0]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else
@@ -2275,7 +2382,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][1][1] !=0){
                         printf("          %d : 반팔갑빠 +%d강 %d개\n\n", i, i, bag[i][1][1]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 51)
@@ -2285,7 +2392,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][2][1] !=0){
                         printf("          %d : 후드갑빠 +%d강 %d개\n\n", i, i, bag[i][2][1]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 52)
@@ -2295,7 +2402,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][3][1] !=0){
                         printf("          %d : 용갑빠 +%d강 %d개\n\n", i, i, bag[i][3][1]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else
@@ -2331,7 +2438,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][1][2] !=0){
                         printf("          %d : 슬리퍼 +%d강 %d개\n\n", i, i, bag[i][1][2]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 51)
@@ -2341,7 +2448,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][2][2] !=0){
                         printf("          %d : 운동화 +%d강 %d개\n\n", i, i, bag[i][2][2]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 52)
@@ -2351,7 +2458,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][3][2] !=0){
                         printf("          %d : 에어조단 +%d강 %d개\n\n", i, i, bag[i][3][2]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else
@@ -2388,7 +2495,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][1][3] !=0){
                         printf("          %d : 고무장갑 +%d강 %d개\n\n", i, i, bag[i][1][3]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 51)
@@ -2398,7 +2505,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][2][3] !=0){
                         printf("          %d : 면장갑 +%d강 %d개\n\n", i, i, bag[i][2][3]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 52)
@@ -2408,7 +2515,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][3][3] !=0){
                         printf("          %d : 가죽장갑 +%d강 %d개\n\n", i, i, bag[i][3][3]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else
@@ -2444,7 +2551,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][1][4] !=0){
                         printf("          %d : 면망토 +%d강 %d개\n\n", i, i, bag[i][1][4]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 51)
@@ -2454,7 +2561,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][2][4] !=0){
                         printf("          %d : 비단망토 +%d강 %d개\n\n", i, i, bag[i][2][4]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 52)
@@ -2464,7 +2571,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][3][4] !=0){
                         printf("          %d : 방탄망토 +%d강 %d개\n\n", i, i, bag[i][3][4]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else
@@ -2500,7 +2607,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][1][5] !=0){
                         printf("          %d : K80마스크 +%d강 %d개\n\n", i, i, bag[i][1][5]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 51)
@@ -2510,7 +2617,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][2][5] !=0){
                         printf("          %d : K90마스크 +%d강 %d개\n\n", i, i, bag[i][2][5]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else if (select == 52)
@@ -2520,7 +2627,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     for (int i = 0; i <= 10; i++)
                     if(bag[i][3][5] !=0){
                         printf("          %d : 타이거마스크 +%d강 %d개\n\n", i, i, bag[i][3][5]);
-                        printf("          10 번은 ~를 입력하시오.");
+                        
                     }
                 }
                 else
@@ -2590,7 +2697,7 @@ void tel_scl(int *x, int *y,int *p_loc,int *s_loc_x, int *s_loc_y,int *s_loc_z,I
     enter(10);
     printf("          1 : 순간이동 주문서(저장)   %d 개 \n\n",item->scroll_s);
     printf("          2 : 순간이동 주문서(이동)   %d 개 \n\n",item->scroll_m);    
-    printf("          저정된 좌표 : %d층   x : %d   y : %d ", *s_loc_z, *s_loc_x ,*s_loc_y);
+    printf("          저장된 좌표 : %d층   x : %d   y : %d ", *s_loc_z, *s_loc_x ,*s_loc_y);
     select = getch();
     if (select == 49 && item->scroll_s != 0)
     {
@@ -3292,7 +3399,7 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
     int cnt = 0;
     char select = 0;
     int num1, num2, num3;
-    
+
     num1 = select - '0';
     num2 = select - '0';
     num3 = select - '0';
@@ -3304,6 +3411,7 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
         select = getch();
         if(select == 49)
         {            
+            system("clear");
             enter(10);
             printf("          몇장을 구매 하시겠습니까?  ");
             scanf("%d", &cnt);
@@ -3316,12 +3424,10 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                 fflush(stdout);
                 item->scroll_eqp += cnt;
                 player->gold -= (cnt * 300);
-                sleep(2);
-                *x = *pp_x;
-                *y = *pp_y;
+                sleep(2);                                
                 break;
             }
-                else
+            else
             {
                 system("clear");
                 enter(10);
@@ -3329,10 +3435,10 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                 printf("          마을로 돌아갑니다.");
                 fflush(stdout);
                 sleep(2);
-                *x = *pp_x;
-                *y = *pp_y;
+                                
                 break;
             }
+
         }             
         else if (select == 50 )
         {            
@@ -3344,8 +3450,7 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                     printf("          마을로 돌아갑니다.");
                     fflush(stdout);
                     sleep(2);
-                    *x = *pp_x;
-                    *y = *pp_y;
+                                        
                     break;
                 }
             else
@@ -3373,60 +3478,98 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][0][0] !=0){
-                            printf("          %d : 기본검 +%d강 %d개\n\n", i+1, i, bag[i][0][0]);
-                            fflush(stdout);
-                            select = getch();
-                            num3 = select - '0';
-                            upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
-                            *x = *pp_x;
-                            *y = *pp_y;
-                            break;
-                        }
-                        else
                         {
-                            *x = *pp_x;
-                            *y = *pp_y;
-                            break;
+                            if(bag[i][0][0] != 0)
+                            {
+                                printf("          %d : 기본검 +%d강 %d개\n\n", i+1, i, bag[i][0][0]);
+                                fflush(stdout);
+                            }
+                        
+                            else
+                            {                                                                
+                                break;
+                            }
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 50)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][1][0] !=0){
-                            printf("          %d : 장검 +%d강 %d개\n\n", i, i, bag[i][1][0]);
-                            select = getch();
-                            num3 = select - '0';
-                        }                    
+                        {
+                            if(bag[i][1][0] !=0)
+                            {
+                                printf("          %d : 장검 +%d강 %d개\n\n", i+1, i, bag[i][1][0]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+
+                            else
+                            {                                                                
+                                break;
+                            }                    
+                        }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 51)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][2][0] !=0){
-                            printf("          %d : 일본도 +%d강 %d개\n\n", i, i, bag[i][2][0]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][2][0] !=0)
+                            {
+                                printf("          %d : 일본도 +%d강 %d개\n\n", i+1, i, bag[i][2][0]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
+                    
                     else if (select == 52)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][3][0] !=0){
-                            printf("          %d : 싸울아비장검 +%d강 %d개\n\n", i, i, bag[i][3][0]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][3][0] !=0)
+                            {
+                                printf("          %d : 싸울아비장검 +%d강 %d개\n\n", i+1, i, bag[i][3][0]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
+                    
                     else
-                    {
-                        *x = *pp_x;
-                        *y = *pp_y;
+                    {                                                
                         break;
                     }
                 }
@@ -3444,49 +3587,95 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][0][1] !=0){
-                            printf("          %d : 기본갑빠 +%d강 %d개\n\n", i, i, bag[i][0][1]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][0][1] !=0)
+                            {
+                                printf("          %d : 기본갑빠 +%d강 %d개\n\n", i+1, i, bag[i][0][1]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 50)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][1][1] !=0){
-                            printf("          %d : 반팔갑빠 +%d강 %d개\n\n", i, i, bag[i][1][1]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][1][1] !=0)
+                            {
+                                printf("          %d : 반팔갑빠 +%d강 %d개\n\n", i+1, i, bag[i][1][1]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 51)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][2][1] !=0){
-                            printf("          %d : 후드갑빠 +%d강 %d개\n\n", i, i, bag[i][2][1]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][2][1] !=0)
+                            {
+                                printf("          %d : 후드갑빠 +%d강 %d개\n\n", i+1, i, bag[i][2][1]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
+                        
                     }
                     else if (select == 52)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][3][1] !=0){
-                            printf("          %d : 용갑빠 +%d강 %d개\n\n", i, i, bag[i][3][1]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][3][1] !=0){
+                                printf("          %d : 용갑빠 +%d강 %d개\n\n", i+1, i, bag[i][3][1]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else
-                    {
-                        *x = *x;
-                        *y = *y;
+                    {                                                
                         break;
                     }
                 }
@@ -3504,49 +3693,92 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][0][2] !=0){
-                            printf("          %d : 기본장화 +%d강 %d개\n\n", i, i, bag[i][0][2]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][0][2] !=0){
+                                printf("          %d : 기본장화 +%d강 %d개\n\n", i+1, i, bag[i][0][2]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 50)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][1][2] !=0){
-                            printf("          %d : 슬리퍼 +%d강 %d개\n\n", i, i, bag[i][1][2]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][1][2] !=0){
+                                printf("          %d : 슬리퍼 +%d강 %d개\n\n", i+1, i, bag[i][1][2]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 51)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][2][2] !=0){
-                            printf("          %d : 운동화 +%d강 %d개\n\n", i, i, bag[i][2][2]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][2][2] !=0)
+                            {
+                                printf("          %d : 운동화 +%d강 %d개\n\n", i+1, i, bag[i][2][2]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 52)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][3][2] !=0){
-                            printf("          %d : 에어조단 +%d강 %d개\n\n", i, i, bag[i][3][2]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][3][2] !=0){
+                                printf("          %d : 에어조단 +%d강 %d개\n\n", i+1, i, bag[i][3][2]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else
-                    {
-                        *x = *x;
-                        *y = *y;
+                    {                                                
                         break;
                     }
 
@@ -3565,48 +3797,93 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][0][3] !=0){
-                            printf("          %d : 기본장갑 +%d강 %d개\n\n", i, i, bag[i][0][3]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][0][3] !=0)
+                            {
+                                printf("          %d : 기본장갑 +%d강 %d개\n\n", i+1, i, bag[i][0][3]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
+                        }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 50)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][1][3] !=0){
-                            printf("          %d : 고무장갑 +%d강 %d개\n\n", i, i, bag[i][1][3]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][1][3] !=0)
+                            {
+                                printf("          %d : 고무장갑 +%d강 %d개\n\n", i+1, i, bag[i][1][3]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 51)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][2][3] !=0){
-                            printf("          %d : 면장갑 +%d강 %d개\n\n", i, i, bag[i][2][3]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][2][3] !=0){
+                                printf("          %d : 면장갑 +%d강 %d개\n\n", i+1, i, bag[i][2][3]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 52)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][3][3] !=0){
-                            printf("          %d : 가죽장갑 +%d강 %d개\n\n", i, i, bag[i][3][3]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][3][3] !=0){
+                                printf("          %d : 가죽장갑 +%d강 %d개\n\n", i+1, i, bag[i][3][3]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else
-                    {
-                        *x = *x;
-                        *y = *y;
+                    {                                                
                         break;
                     }
                 }
@@ -3624,33 +3901,67 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][0][4] !=0){    
-                            printf("          %d : 기본망토 +%d강 %d개\n\n", i, i, bag[i][0][4]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][0][4] !=0)
+                            {    
+                                printf("          %d : 기본망토 +%d강 %d개\n\n", i+1, i, bag[i][0][4]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 50)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][1][4] !=0){
-                            printf("          %d : 면망토 +%d강 %d개\n\n", i, i, bag[i][1][4]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][1][4] !=0){
+                                printf("          %d : 면망토 +%d강 %d개\n\n", i+1, i, bag[i][1][4]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 51)
                     {
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][2][4] !=0){
-                            printf("          %d : 비단망토 +%d강 %d개\n\n", i, i, bag[i][2][4]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][2][4] !=0){
+                                printf("          %d : 비단망토 +%d강 %d개\n\n", i+1, i, bag[i][2][4]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                     }
                     else if (select == 52)
                     {
@@ -3658,15 +3969,13 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                         enter(3);
                         for (int i = 0; i <= 10; i++)
                         if(bag[i][3][4] !=0){
-                            printf("          %d : 방탄망토 +%d강 %d개\n\n", i, i, bag[i][3][4]);
+                            printf("          %d : 방탄망토 +%d강 %d개\n\n", i+1, i, bag[i][3][4]);
                             select = getch();
                             num3 = select - '0';
                         }
                     }
                     else
-                    {
-                        *x = *x;
-                        *y = *y;
+                    {                                                
                         break;
                     }
                 }
@@ -3684,74 +3993,116 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
                         system("clear");
                         enter(3);
                         for (int i = 0; i <= 10; i++)
-                        if(bag[i][0][5] !=0){
-                            printf("          %d : 기본마스크 +%d강 %d개\n\n", i, i, bag[i][0][5]);
-                            select = getch();
-                            num3 = select - '0';
+                        {
+                            if(bag[i][0][5] !=0)
+                            {
+                                printf("          %d : 기본마스크 +%d강 %d개\n\n", i+1, i, bag[i][0][5]);
+                                select = getch();
+                                num3 = select - '0';
+                            }
+                            else
+                            {                                                                
+                                break;
+                            }                    
                         }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                         }
                         else if (select == 50)
                         {
                             system("clear");
                             enter(3);
                             for (int i = 0; i <= 10; i++)
-                            if(bag[i][1][5] !=0){
-                                printf("          %d : K80마스크 +%d강 %d개\n\n", i, i, bag[i][1][5]);
-                                select = getch();
-                                num3 = select - '0';
+                            {
+                                if(bag[i][1][5] !=0)
+                                {
+                                    printf("          %d : K80마스크 +%d강 %d개\n\n", i+1, i, bag[i][1][5]);
+                                    select = getch();
+                                    num3 = select - '0';
+                                }
+                                else
+                                {                                                                
+                                    break;
+                                }                    
+                            }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                         }
                         else if (select == 51)
                         {
                             system("clear");
                             enter(3);
                             for (int i = 0; i <= 10; i++)
-                            if(bag[i][2][5] !=0){
-                                printf("          %d : K90마스크 +%d강 %d개\n\n", i, i, bag[i][2][5]);
-                                select = getch();
-                                num3 = select - '0';
+                            {
+                                if(bag[i][2][5] !=0)
+                                {
+                                    printf("          %d : K90마스크 +%d강 %d개\n\n", i+1, i, bag[i][2][5]);
+                                    select = getch();
+                                    num3 = select - '0';
+                                }
+                                else
+                                {                                                                
+                                    break;
+                                }                    
                             }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;                                     
+
                         }
                         else if (select == 52)
                         {
                             system("clear");
                             enter(3);
                             for (int i = 0; i <= 10; i++)
-                            if(bag[i][3][5] !=0){
-                                printf("          %d : 타이거마스크 +%d강 %d개\n\n", i, i, bag[i][3][5]);
-                                select = getch();
-                                num3 = select - '0';
+                            {
+                                if(bag[i][3][5] !=0){
+                                    printf("          %d : 타이거마스크 +%d강 %d개\n\n", i+1, i, bag[i][3][5]);
+                                    select = getch();
+                                    num3 = select - '0';
+                                }
+                                else
+                                {                                                                
+                                    break;
+                                }                    
                             }
+                        select = getch();
+                        num3 = select - '0';
+                        upgrade_item(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, player, bag, item, &num1, &num2, &num3);
+                                                
+                        break;
                         }
                         else
-                        {
-                            *x = *x;
-                            *y = *y;
+                        {                                                        
                             break;
                         }
                     }
-                
+                else
+                {                                        
+                    break;
+                }
             }
         }    
-        else
-        {
-            enter(10);
-            printf("          마을로 돌아갑니다.");
-            sleep(2);
-            *x = *pp_x;
-            *y = *pp_y;
-            break;
-        }
-        }    
-        }
-        else
-        {
-            *x = *pp_x;
-            *y = *pp_y;
-            break;
-        }
-    }
+            else
+            {
+                enter(10);
+                printf("          마을로 돌아갑니다.");
+                sleep(2);                      
+            
+                break;
+            }
+        }             
+    *x = *pp_x;
+    *y = *pp_y;  
 }
-
 
 int upgrade_item(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, Player *player, int bag[bag_z][bag_y][bag_x],Item *item,int *num1,int *num2,int *num3)
 {
@@ -3759,33 +4110,68 @@ int upgrade_item(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *
 
     int num = rand() % 100;
     
-        if(num < 50)
+        if(bag[*num3-1][*num2-1][*num1-1] != 0)
         {
-            system("clear");
-            enter(10);
-            printf("          강화에 실패하여 장비가 파괴됩니다.\n\n");
-            bag[*num3-1][*num2-1][*num1-1] -= 1;
-            item->scroll_eqp -= 1;
-            sleep(1);
-            *x = *pp_x;
-            *y = *pp_y;
-
-            
+            if(num < 10)
+            {
+                system("clear");
+                enter(10);
+                printf("          강화에 실패하여 장비가 파괴됩니다.\n\n");
+                bag[*num3-1][*num2-1][*num1-1] -= 1;
+                item->scroll_eqp -= 1;
+                sleep(1);           
+            }
+            else
+            {
+                system("clear");
+                enter(10);
+                printf("          강화에 성공하였습니다.\n\n");
+                printf("          이것을 회득합니다.");
+                fflush(stdout);
+                bag[*num3-1][*num2-1][*num1-1] -= 1;
+                bag[(*num3)][*num2-1][*num1-1] += 1;
+                item->scroll_eqp -= 1;
+                sleep(1);            
+            } 
         }
         else
         {
             system("clear");
             enter(10);
-            printf("          강화에 성공하였습니다.\n\n");
-            printf("          이것을 회득합니다.");
-            fflush(stdout);
-            bag[*num3-1][*num2-1][*num1-1] -= 1;
-            bag[(*num3)][*num2-1][*num1-1] += 1;
-            item->scroll_eqp -= 1;
+            printf("          장비가 없습니다.\n\n");
             sleep(1);
-            *x = *pp_x;
-            *y = *pp_y;
-        } 
-    }
+        }
+    
+}
+    
+void interface(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc, int bag[bag_z][bag_y][bag_x] ,Player *player,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[])
+{
+    system("clear");
+    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+    enter(6);
+    printf("\t\t이름 : %s\t\t\t직업 : 전설의 용사\n\n", player->name);
+    printf("\t\t레벨 : %d\t\t\t경험치 : %d / %d\n\n", player->level, player->xp,player->max_xp);
+    printf("\t\t체력 : %.1lf / %.1lf\t\t마나 : %d / %d\n\n", player->hp, player->max_hp, player->mp, player->max_mp);
+    printf("\t\t공격력 : %.1lf\t\t\t무기 공격력 : %.1lf\n\n", player->dmg, ((w_inf)[3].dmg*(mul)[8].mul));
+    printf("\t\t총 공격력 : %.1f\t\t장비 방어력 : %.1lf\n\n", (player->dmg + ((w_inf)[3].dmg*(mul)[8].mul)),player->defence);
+    printf("\t\t착용 무기 : %s + %d강\n\n",(w_inf)[3].name,(mul)[8].star);
+    printf("\t\t착용 갑옷 : %s + %d강\n\n",(a_inf)[0].name,(mul)[8].star);
+    printf("\t\t착용 장화 : %s + %d강\n\n",(s_inf)[0].name,(mul)[8].star);
+    printf("\t\t착용 장갑 : %s + %d강\n\n",(g_inf)[0].name,(mul)[8].star);
+    printf("\t\t착용 망토 : %s + %d강\n\n",(c_inf)[0].name,(mul)[8].star);
+    printf("\t\t착용 마스크 : %s + %d강",(m_inf)[0].name,(mul)[8].star);
     
     
+    fflush(stdout);
+    char input = getch();
+
+
+
+
+
+
+
+
+
+
+}

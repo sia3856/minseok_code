@@ -66,7 +66,7 @@ struct item
     int scroll_m;   //귀환 이동
     int scroll_v;   //마을 귀환
     int elx;   //엘릭서
-    int scroll_eqp;
+    int scroll_eqp;   // 장비강화 주문서
 };
 
 struct monster
@@ -214,7 +214,7 @@ void interface(int bag[bag_z][bag_y][bag_x] ,Player *player,W_inf w_inf[], Mul m
 int wear_eqp(int bag[bag_z][bag_y][bag_x], W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp,int *num1,int *num2,int *num3);
 int ending_statis();
 int rematch_print(Monster s_mon_list[], int s_ran_num);
-
+int elx_use(Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp);
 
 int main(void)
 {
@@ -688,7 +688,7 @@ int main(void)
         {"메테오", 16, 1.5, 2.5},
     };
     
-    Item item ={2,0,0,0,0,0,0,0,4,0,2,0,100};
+    Item item ={2,0,0,0,0,0,0,0,4,0,2,3,100};
     
     Player player = {"복이", 10, 100, 1, 100, 100, 10, 0, 100, 0, 5000, 0, 10, *p_skill_list};
     
@@ -738,7 +738,7 @@ int main(void)
     
     Mul mul[11] = {{0,1},{1,1.1},{2,1.2},{3,1.3},{4,1.4},{5,1.5},{6,1.6},{7,1.7},{8,1.8},{9,1.9},{10,2}};
 
-    Eqp eqp = {0,0,0,0,0,0,0,0,0,0,0,0};
+    Eqp eqp = {7,0,0,0,0,0,0,0,0,0,0,0};
 
 
 
@@ -2914,11 +2914,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
 
                 }
@@ -2945,11 +2947,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 51)
@@ -2975,11 +2979,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 52)
@@ -3005,17 +3011,24 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else
                 {
-                    *x = *x;
-                    *y = *y;
+                    system("clear");
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    enter(13);
+                    printf("\t\t\t잘못 입력했습니다.\n");
+                    enter(13);
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    sleep(1);
                     break;
                 }
             }
@@ -3052,11 +3065,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 50)
@@ -3082,11 +3097,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 51)
@@ -3112,11 +3129,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 52)
@@ -3142,17 +3161,24 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else
                 {
-                    *x = *x;
-                    *y = *y;
+                    system("clear");
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    enter(13);
+                    printf("\t\t\t잘못 입력했습니다.\n");
+                    enter(13);
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    sleep(1);
                     break;
                 }
             }
@@ -3189,11 +3215,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 50)
@@ -3219,11 +3247,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 51)
@@ -3249,11 +3279,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 52)
@@ -3279,17 +3311,24 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else
                 {
-                    *x = *x;
-                    *y = *y;
+                    system("clear");
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    enter(13);
+                    printf("\t\t\t잘못 입력했습니다.\n");
+                    enter(13);
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    sleep(1);
                     break;
                 }
                 
@@ -3327,11 +3366,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 50)
@@ -3357,11 +3398,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 51)
@@ -3387,11 +3430,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 52)
@@ -3417,17 +3462,24 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else
                 {
-                    *x = *x;
-                    *y = *y;
+                    system("clear");
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    enter(13);
+                    printf("\t\t\t잘못 입력했습니다.\n");
+                    enter(13);
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    sleep(1);
                     break;
                 }
             }
@@ -3464,11 +3516,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 50)
@@ -3494,11 +3548,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 51)
@@ -3524,11 +3580,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 52)
@@ -3554,17 +3612,24 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else
                 {
-                    *x = *x;
-                    *y = *y;
+                    system("clear");
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    enter(13);
+                    printf("\t\t\t잘못 입력했습니다.\n");
+                    enter(13);
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    sleep(1);
                     break;
                 }
             }
@@ -3601,11 +3666,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 50)
@@ -3631,11 +3698,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 51)
@@ -3661,11 +3730,13 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else if (select == 52)
@@ -3691,24 +3762,36 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
                     {
                         num3 = 10;
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                     else
                     {
                         num3 = select - '0';
                         wear_eqp(bag, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, &num1, &num2, &num3);
+                        break;
                     }
                 }
                 else
                 {
-                    *x = *x;
-                    *y = *y;
+                    system("clear");
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    enter(13);
+                    printf("\t\t\t잘못 입력했습니다.\n");
+                    enter(13);
+                    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                    sleep(1);
                     break;
                 }
             }
             else
             {
-                *x = *x;
-                *y = *y;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("\t\t\t잘못 입력했습니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
                 break;
 
             }
@@ -3718,48 +3801,79 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
         {
             system("clear");
             printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
-            enter(10);
+            enter(9);
             printf("          \t\t\t1 : 물약\n\n");
             printf("          \t\t\t2 : 순간이동 주문서\n\n");
             printf("          \t\t\t3 : 마을이동 주문서 : %d 개\n\n",item->scroll_v);
             printf("          \t\t\t4 : 장비 강화 주문서 : %d 개 \n\n",item->scroll_eqp);
-            enter(9);
+            printf("          \t\t\t5 : 엘릭서 : %d 개 \n\n",item->elx);
+            enter(8);
             printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
             select = getch();
 
             if (select == 49)
             {
                 potion(x, y,player,item);
+                break;
             }
             else if(select == 50)
             {
                 tel_scl(x, y,p_loc,s_loc_x,s_loc_y,s_loc_z,item);
+                break;
             }
             else if(select == 51 && item->scroll_v != 0)
             {
                 system("clear");
                 printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
-                enter(14);
-                printf("          \t\t\t마을로 이동합니다.");
                 enter(13);
+                printf("          \t\t\t마을로 이동합니다.");
+                enter(14);
                 printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
                 *x = 0;
                 *y = 0;
                 *p_loc = 0;
                 item->scroll_v -= 1;
+                break;
+            }
+            else if(select == 52)
+            {
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t장비 강화 주문서를 사용할려면 대장장이 한테 가시오.");
+                enter(14);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+            }
+            else if(select == 53)
+            {
+                elx_use(item, w_inf, mul,a_inf, s_inf, g_inf, c_inf,m_inf, eqp);
+                break;
             }
             else
             {
-                *x = *x;
-                *y = *y;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("\t\t\t잘못 입력했습니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);;
                 break;
             }
         }
         else
             {
-                *x = *x;
-                *y = *y;
-                break;
+                system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(13);
+            printf("\t\t\t잘못 입력했습니다.\n");
+            enter(13);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+            break;
             }
     }
 }
@@ -5743,7 +5857,7 @@ void interface(int bag[bag_z][bag_y][bag_x] ,Player *player,W_inf w_inf[], Mul m
 
 int wear_eqp(int bag[bag_z][bag_y][bag_x], W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp,int *num1,int *num2,int *num3)
 {
-    //num1 = 장비 종류 2 = 티어 3= 강화 단계
+    //num1 = 장비 종류 num2 = 티어 num3= 강화 단계
     system("clear"); 
     int t_w_s = eqp->w_s;
     int t_w_t = eqp->w_t;
@@ -5925,18 +6039,237 @@ int wear_eqp(int bag[bag_z][bag_y][bag_x], W_inf w_inf[], Mul mul[], A_inf a_inf
         else
         {
             system("clear");
-            enter(10);
-            printf("          오?류?.\n\n");
-            fflush(stdout);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(13);
+            printf("\t\t\t잘못 입력했습니다.\n");
+            enter(13);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
             sleep(1);
         }
     }
     else
     {
         system("clear");
-        enter(10);
-        printf("          장비가 없습니다.\n\n");
+        printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+        enter(13);
+        printf("          \t\t\t장비가 없습니다.\n\n");
+        enter(12);
+        printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
         fflush(stdout);
+        sleep(1);
+    }
+}
+
+int elx_use(Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp)
+{
+    int w_s = eqp->w_s;
+    int w_t = eqp->w_t;
+    int a_s = eqp->a_s;
+    int a_t = eqp->a_t;
+    int s_s = eqp->s_s;
+    int s_t = eqp->s_t;
+    int g_s = eqp->g_s;
+    int g_t = eqp->g_t;
+    int c_s = eqp->c_s;
+    int c_t = eqp->c_t;
+    int m_s = eqp->m_s;
+    int m_t = eqp->m_t;
+    system("clear");
+    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+    enter(8);
+    printf("\t\t\t강화할 장비를 고르시오 . ( %d개 보유중 )\n\n",item->elx);
+    printf("\t\t\t1. 무기 : %s + %d강\n\n",(w_inf)[w_t].name,(mul)[w_s].star);
+    printf("\t\t\t2. 갑옷 : %s + %d강\n\n",(a_inf)[a_t].name,(mul)[a_s].star);
+    printf("\t\t\t3. 장화 : %s + %d강\n\n",(s_inf)[s_t].name,(mul)[s_s].star);
+    printf("\t\t\t4. 장갑 : %s + %d강\n\n",(g_inf)[g_t].name,(mul)[g_s].star);
+    printf("\t\t\t5. 망토 : %s + %d강\n\n",(c_inf)[c_t].name,(mul)[c_s].star);
+    printf("\t\t\t6. 마스크 : %s + %d강",(m_inf)[m_t].name,(mul)[m_s].star);
+    enter(7);
+    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+    fflush(stdout);
+    char select = getch();
+    if(item->elx != 0)
+    {
+        if(select == 49 && w_s == 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(13);
+            printf("\t\t\t%s +10 강입니다. \n\n",(w_inf)[w_t].name);
+            printf("\t\t\t강화가 필요없습니다.");
+            enter(12);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+        }
+        else if (select== 49 && w_s != 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(11);
+            printf("\t\t\t엘릭서 하나를 소모하여 \n\n");
+            printf("\t\t\t%s +%d 강을 강화합니다. \n\n",(w_inf)[w_t].name, w_s);
+            printf("\t\t\t%s +%d 강이 됩니다. \n\n",(w_inf)[w_t].name, w_s+1);
+            enter(10);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+            eqp->w_s = w_s+1;
+            item->elx -= 1; 
+        }
+        else if(select == 50 && a_s == 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(13);
+            printf("\t\t\t%s +10 강입니다. \n\n",(a_inf)[a_t].name);
+            printf("\t\t\t강화가 필요없습니다.");
+            enter(12);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+        }
+        else if (select== 50 && a_s != 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(11);
+            printf("\t\t\t엘릭서 하나를 소모하여 \n\n");
+            printf("\t\t\t%s +%d 강을 강화합니다. \n\n",(a_inf)[a_t].name, a_s);
+            printf("\t\t\t%s +%d 강이 됩니다. \n\n",(a_inf)[a_t].name, a_s+1);
+            enter(10);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+            eqp->a_s = a_s+1;
+            item->elx -= 1; 
+        }
+        else if(select == 51 && s_s == 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(13);
+            printf("\t\t\t%s +10 강입니다. \n\n",(s_inf)[s_t].name);
+            printf("\t\t\t강화가 필요없습니다.");
+            enter(12);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+        }
+        else if (select== 51 && s_s != 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(11);
+            printf("\t\t\t엘릭서 하나를 소모하여 \n\n");
+            printf("\t\t\t%s +%d 강을 강화합니다. \n\n",(s_inf)[s_t].name, s_s);
+            printf("\t\t\t%s +%d 강이 됩니다. \n\n",(s_inf)[s_t].name, s_s+1);
+            enter(10);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+            eqp->s_s = s_s+1;
+            item->elx -= 1; 
+        }
+        else if(select == 52 && g_s == 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(13);
+            printf("\t\t\t%s +10 강입니다. \n\n",(g_inf)[g_t].name);
+            printf("\t\t\t강화가 필요없습니다.");
+            enter(12);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+        }
+        else if (select== 52 && g_s != 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(11);
+            printf("\t\t\t엘릭서 하나를 소모하여 \n\n");
+            printf("\t\t\t%s +%d 강을 강화합니다. \n\n",(g_inf)[g_t].name, g_s);
+            printf("\t\t\t%s +%d 강이 됩니다. \n\n",(g_inf)[g_t].name, g_s+1);
+            enter(10);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+            eqp->g_s = g_s+1;
+            item->elx -= 1; 
+        }
+        else if(select == 53 && c_s == 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(13);
+            printf("\t\t\t%s +10 강입니다. \n\n",(c_inf)[c_t].name);
+            printf("\t\t\t강화가 필요없습니다.");
+            enter(12);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+        }
+        else if (select== 53 && c_s != 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(11);
+            printf("\t\t\t엘릭서 하나를 소모하여 \n\n");
+            printf("\t\t\t%s +%d 강을 강화합니다. \n\n",(c_inf)[c_t].name, c_s);
+            printf("\t\t\t%s +%d 강이 됩니다. \n\n",(c_inf)[c_t].name, c_s+1);
+            enter(10);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+            eqp->c_s = c_s+1;
+            item->elx -= 1; 
+        }
+        else if(select == 54 && m_s == 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(13);
+            printf("\t\t\t%s +10 강입니다. \n\n",(m_inf)[m_t].name);
+            printf("\t\t\t강화가 필요없습니다.");
+            enter(12);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+        }
+        else if (select== 54 && m_s != 10)
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(11);
+            printf("\t\t\t엘릭서 하나를 소모하여 \n\n");
+            printf("\t\t\t%s +%d 강을 강화합니다. \n\n",(m_inf)[m_t].name, m_s);
+            printf("\t\t\t%s +%d 강이 됩니다. \n\n",(m_inf)[m_t].name, m_s+1);
+            enter(10);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+            eqp->m_s = m_s+1;
+            item->elx -= 1; 
+        }
+        else
+        {
+            system("clear");
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            enter(13);
+            printf("\t\t\t잘못 입력했습니다.\n");
+            enter(13);
+            printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
+        }
+    }
+    else if(item->elx == 0)
+    {
+        system("clear");
+        printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+        enter(13);
+        printf("\t\t\t엘릭서가 없습니다.\n");
+        enter(13);
+        printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+        sleep(1);
+    }
+    else
+    {
+        system("clear");
+        printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+        enter(13);
+        printf("\t\t\t잘못 입력했습니다.\n");
+        enter(13);
+        printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
         sleep(1);
     }
 }

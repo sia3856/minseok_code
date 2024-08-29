@@ -53,7 +53,6 @@ struct player
     int max_xp;
     int xp;
     int gold;
-    int t_portal;
     double e_dmg;
     struct p_skill skill_list[6];
 };
@@ -241,18 +240,18 @@ int elx_use(Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G
 int main(void)
 {
     
-    //intro();
+    intro();
     int i, j;
 
-    int bag[bag_z][bag_y][bag_x] = {100, 1, 1, 1, 1};
+    int bag[bag_z][bag_y][bag_x] = {};
     int map[z_len][y_len][x_len] = {
-    {{0,0,	0,	0,	0,	18,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	20,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6},
+    {{0,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	20,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	19,	6,	6,	6,	20,	6,	6,	6,	6,	8,	6,	6,	6,	6,	6,	6,	20,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	19,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	8,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	26,	21,	21,	19,	19,	6,	6,	6,	6,	6,	6,	8,	6,	6,	6,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	7,	7,	7,	7,	7,	7,	7,	7,	7,	7,	6,	6,	6,	6},
-    {-15,	0,	0,	0,	0,	0,	-5,	0,	0,	0,	0,	13,	0,	0,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	7,	7,	7,	7,	7,	7,	7,	7,	6,	6,	6,	6},
+    {-15,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	13,	0,	0,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	7,	7,	7,	7,	7,	7,	7,	7,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	19,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	13,	0,	0,	0,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	6,	6,	8,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	21,	21,	19,	6,	6,	6,	6,	6,	6,	6,	6},
@@ -648,7 +647,20 @@ int main(void)
     {24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	24,	1,	27,	27,	27,	27,	27,	27,	27,	12,	12,	12,	12,	12,	12,	12,	12,	12,	12}}};
     
 
-
+    for(int num1 = 0; num1 <6; num1++)
+    {
+        for(int num2 = 0; num2 < 4; num2++)
+        {
+            for(int num3 = 0; num3 < 11 ; num3++)
+            {
+                bag[num3][num2][num1] += 1;
+            }
+        }
+    }
+    
+    
+    
+    
     int copy_map[z_len][y_len][x_len];
 
     for (int z = 0; z < z_len; z++)
@@ -690,9 +702,9 @@ int main(void)
         {"메테오", 16, 1.5, 2.5},
     };
     
-    Item item ={2,0,0,0,0,0,0,0,4,0,2,3,100};
+    Item item ={3,3,3,3,3,3,3,3,3,3,3,3,3};
+                
     
-    Player player = {"복이", 10, 1000, 1000, 100, 100, 5000, 0, 100, 0, 5000, 0, 10, *p_skill_list};
 
     W_inf w_inf[4] = {
         {"기본검", 2},
@@ -738,13 +750,17 @@ int main(void)
 
     Mul mul[11] = {{0,1},{1,1.1},{2,1.2},{3,1.3},{4,1.4},{5,1.5},{6,1.6},{7,1.7},{8,1.8},{9,1.9},{10,2}};
 
-    Eqp eqp = {7,0,8,0,6,0,0,6,0,0,0,0};
+    Eqp eqp = {0,0,0,0,0,0,0,0,0,0,0,0};
 
     Statis statis = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                  //     레벨 M체력 체력 M마나 마나 공격력 방어력 M경험치 경험치 돈    무기 경험치
+    Player player = {"복이", 1, 300, 300, 100, 100, 7000, 0, 100, 5000, 500000, 0, *p_skill_list};
+
     player.defence = (a_inf[eqp.a_t].def * mul[eqp.a_s].mul) + (s_inf[eqp.s_t].def * mul[eqp.s_s].mul) + (g_inf[eqp.g_t].def * mul[eqp.g_s].mul) + (c_inf[eqp.c_t].def * mul[eqp.c_s].mul) + (m_inf[eqp.m_t].def * mul[eqp.m_s].mul);
 
     player.e_dmg = w_inf[eqp.w_t].dmg * mul[eqp.w_s].mul ;
-    
+
+
     for(int i = 0; i < 6; i++)
     {
         player.skill_list[i] = p_skill_list[i];
@@ -1129,15 +1145,15 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
     char move = 0;
 
     printf(" 좌표(x,y)(%d,%d)\n", *x, *y);
-    printf("      🅆                            이름 : %s    직업 : 전설의 용사    LV : %d (%d/%d)\n",player->name,player->level, player->xp, player->max_xp);
-    printf("      ⬆                                           HP : %.1lf / %.1lf    MP : %d / %d  \n", player->hp, player->max_hp, player->mp, player->max_mp);
-    printf(" 🄰 ⬅     ⮕ 🄳                                            🄸  : 가방       🄾  : 스테이터스\n");
+    printf("                                   이름 : %s    직업 : 전설의 용사    LV : %d (%d/%d)\n",player->name,player->level, player->xp, player->max_xp);
+    printf("      ⬆                                   HP : %-8.1lf/ %-14.1lf MP : %d / %d  \n", player->hp, player->max_hp, player->mp, player->max_mp);
+    printf("  ⬅       ⮕                                             🄸  : 가방       🄾  : 스테이터스\n");
     printf("      ⬇   \n");
-    printf("      🅂                                                                   돈 : %d원\n", player->gold);
+    printf("                                                                         돈 : %d원\n", player->gold);
     printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
     move = getch();
 
-    if (move == 65 || move == 97) // ↞a
+    if (move == 65 || move == 97) // ↞a 68
     {
         // 움직이는 방향의 좌표가 이동 가능하면,
         if (*x > 0 && map[*p_loc][*y][(*x)-1] != 1 && map[*p_loc][*y][(*x)-1] != 6 && map[*p_loc][*y][(*x)-1] != 10 && map[*p_loc][*y][(*x)-1] != 12 && map[*p_loc][*y][(*x)-1] != 13 && map[*p_loc][*y][(*x)-1] != 19 && map[*p_loc][*y][(*x)-1] != 22 && map[*p_loc][*y][(*x)-1] != 23 && map[*p_loc][*y][(*x)-1] != 24 && map[*p_loc][*y][(*x)-1] != 25 && map[*p_loc][*y][(*x)-1] != 26 && map[*p_loc][*y][(*x)-1] != 28 && map[*p_loc][*y][(*x)-1] != 29 && map[*p_loc][*y][(*x)-1] != 30 && map[*p_loc][*y][(*x)-1] != 32 && map[*p_loc][*y][(*x)-1] != 34 && map[*p_loc][*y][(*x)-1] != 37)
@@ -1146,7 +1162,7 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
             (statis->move_cnt)++;
         }            
     }
-    else if (move == 68 || move == 100) // d↠
+    else if (move == 68 || move == 100) // d↠  67
     {
         // 움직이는 방향의 좌표가 이동 가능하면,
        
@@ -1156,7 +1172,7 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
             (statis->move_cnt)++;         
         }     
     }
-    else if (move == 87 || move == 119) // w위로
+    else if (move == 87 || move == 119) // w위로  65
     {
         // 움직이는 방향의 좌표가 이동 가능하면,
         
@@ -1166,7 +1182,7 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
             (statis->move_cnt)++;
         }             
     }
-    else if (move == 83 || move == 115) // s아래로
+    else if (move == 83 || move == 115) // s아래로  66
     {
         // 움직이는 방향의 좌표가 이동 가능하면,
         if (*y < ylen - 1 && map[*p_loc][(*y)+1][*x] != 1 && map[*p_loc][(*y)+1][*x] != 6 && map[*p_loc][(*y)+1][*x] != 10 && map[*p_loc][(*y)+1][*x] != 12 && map[*p_loc][(*y)+1][*x] != 13 && map[*p_loc][(*y)+1][*x] != 19 && map[*p_loc][(*y)+1][*x] != 22 && map[*p_loc][(*y)+1][*x] != 23 && map[*p_loc][(*y)+1][*x] != 24 && map[*p_loc][(*y)+1][*x] != 25 && map[*p_loc][(*y)+1][*x] != 26 && map[*p_loc][(*y)+1][*x] != 28 && map[*p_loc][(*y)+1][*x] != 29 && map[*p_loc][(*y)+1][*x] != 30 && map[*p_loc][(*y)+1][*x] != 32 && map[*p_loc][(*y)+1][*x] != 34 && map[*p_loc][(*y)+1][*x] != 37)
@@ -1659,6 +1675,7 @@ int right_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p
             return 1;
         }  
     }
+    return 2;
 }
 
 int left_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt)
@@ -1681,6 +1698,7 @@ int left_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_
                 return 1;
             }
         }
+        return 2;
 }
 
 int up_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt)
@@ -1703,6 +1721,7 @@ int up_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y,
             return 1;
         }
     }
+    return 2;
 }
 
 int down_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *cnt, int skip_chk_arr[][2], int *q_cnt)
@@ -1729,6 +1748,7 @@ int down_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_
             return 1;
         }     
     }
+    return 2;
 }
 
 int map_move(int xlen, int ylen, int *x, int *y, int *p_loc, Item *item)
@@ -1841,9 +1861,9 @@ int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster b
         enter(1);
         printf("  플레이어 이름 : %s\t\t\t\t\t", player->name);  
         printf("  몬스터 이름 : %s\n", p_monster->name);
-        printf("  플레이어 HP : %.1lf / %.1lf\t\t\t\t", player->hp, player->max_hp); 
+        printf("  플레이어 HP : %.1lf / %-10.1lf\t\t\t", player->hp, player->max_hp); 
         printf("  몬스터 체력 : %.1lf / %.1lf\n", p_monster->hp, p_monster->full_hp);
-        printf("  플레이어 MP : %d / %d\t\t\t\t", player->mp, player->max_mp); 
+        printf("  플레이어 MP : %d / %-10d\t\t\t", player->mp, player->max_mp); 
         printf("  몬스터 공격력 : %d ~ %d\n", p_monster->min_dmg, p_monster->max_dmg);
         printf("  플레이어 공격력 : %.1lf\t\t\t\t", player->dmg);
         enter(2);
@@ -2593,7 +2613,7 @@ int level_up(Player *player)
         {
             ran_hp = rand() % (int)((player->max_hp * 2) - (player->max_hp * 1.3) + 1) + (player->max_hp * 1.3); 
             ran_mp = rand() % (int)((player->max_mp * 2) - (player->max_hp * 1.3) + 1) + (player->max_hp * 1.3);
-            ran_dmg = rand() % (int)((player->dmg * 2.5) - (player->dmg * 1.3) + 1) + (player->dmg * 1.3);
+            ran_dmg = rand() % (int)((player->dmg * 1.5) - (player->dmg * 1.1) + 1) + (player->dmg * 1.1);
 
             rest_xp = player->xp - player->max_xp;
             hp_gap = ran_hp - player->max_hp;
@@ -6476,7 +6496,7 @@ int upgrade_item(int bag[bag_z][bag_y][bag_x],Item *item,int *num1,int *num2,int
     
         if(bag[*num3-1][*num2-1][*num1-1] != 0)
         {
-            if(num < 50) // 확률 50퍼 세팅
+            if(num < 30) // 확률 50퍼 세팅
             {
                 system("clear");
                 printf("═════════════════════════════════════════════════════════════════════════════════════════\n");

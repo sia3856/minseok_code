@@ -162,22 +162,6 @@ struct eqp
     int m_t; 
 };
 
-struct statis
-{
-    int n_kill_cnt; 
-    int s_kill_cnt;
-    int b_kill_cnt; 
-    int move_cnt; 
-    int atk_cnt; 
-    int skill_cnt; 
-    int do_dmg_qty; 
-    int get_dmg_qty; 
-    int get_xp; 
-    int get_gold;
-    int die_cnt;
-    int run_cnt;
-};
-
 typedef struct player Player;
 typedef struct monster Monster;
 typedef struct p_skill P_skill;
@@ -191,7 +175,6 @@ typedef struct c_inf C_inf;
 typedef struct m_inf M_inf;
 typedef struct mul Mul;
 typedef struct eqp Eqp;
-typedef struct statis Statis;
 
 int intro();
 int getch();
@@ -200,33 +183,33 @@ void m_print(int m_m_m);
 int buy();
 int slot_intro();
 int num_dot(int num);
-void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,  int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt], Statis *statis);
+void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,  int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt]);
 void monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2]);
 int s_monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *pp_x, int *pp_y, int *p_loc, int qmyx[][2]);
 int right_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt);
 int left_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt);
 int up_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt);
 int down_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *cnt, int skip_chk_arr[][2], int *q_cnt);
-int outro();
+
 int map_move(int xlen, int ylen, int *x, int *y, int *p_loc,Item *item); 
 void map_print(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc);
 void monster_make(int map[][50][50], int copy_map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc, int *pp_loc);
-void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int *p1, int *p2, int *p3, int *p4, int *p5, int *p6, int *s_play, Player *player, Statis *statis);
+void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int *p1, int *p2, int *p3, int *p4, int *p5, int *p6, int *s_play, Player *player);
 int shop(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y,int bag[bag_z][bag_y][bag_x] ,Player *player,Item *item);
 void p_mon_put(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster boss_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc);
-int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster boss_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int xlen, int ylen, Item *item, int *mon_death, int bag[][4][6], Statis *statis, int *boss_die);
-int monster_die(int map[][50][50], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, Item *item, int *mon_death, int bag[][4][6], Statis *statis);
+int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster boss_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int xlen, int ylen, Item *item, int *mon_death, int bag[][4][6]);
+int monster_die(int map[][50][50], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, Item *item, int *mon_death, int bag[][4][6]);
 int player_die(int map[][50][50], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, Item *item);
-int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_stirng2[], char p_stirng3[], char p_string4[], char p_string5[], Item *item, char m_string[], Statis *statis);
-int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char m_string[], char m_string1[], char m_string2[], char m_string3[], char m_string4[], char m_string5[], char m_string6[], Statis *statis);
+int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_stirng2[], char p_stirng3[], char p_string4[], char p_string5[], Item *item, char m_string[]);
+int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char m_string[], char m_string1[], char m_string2[], char m_string3[], char m_string4[], char m_string5[], char m_string6[]);
 int level_up(Player *player);
 int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt]);
 int potion(int *x, int *y,Player *player,Item *item);  // 포션 
 void tel_scl(int *x, int *y,int *p_loc,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt]); // 순간이동 주문서
-int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_string2[], char p_string3[], char p_string4[], char p_string5[], Statis *statis);
+int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_string2[], char p_string3[], char p_string4[], char p_string5[]);
 void use_hpotion(double *hp, double *m_hp, int *potion_count, int amount, const char *type);
 void use_mpotion(int *mp, int *m_mp, int *potion_count, int amount, const char *type );
-int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster boss_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int xlen, int ylen, Item *item, int *mon_death, int *bat_x, int *bat_y, int bag[][4][6], Statis *statis, int *boss_die);
+int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster boss_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int xlen, int ylen, Item *item, int *mon_death, int *bat_x, int *bat_y, int bag[][4][6]);
 void h_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y,Player *player);
 int lve_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, Player *player);
 void lv_s_up(int num, Player *player);
@@ -234,13 +217,12 @@ int eqp_spot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y
 int upgrade_item(int bag[bag_z][bag_y][bag_x],Item *item,int *num1,int *num2,int *num3, W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[]);
 void interface(int bag[bag_z][bag_y][bag_x] ,Player *player,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp);
 int wear_eqp(int bag[bag_z][bag_y][bag_x], W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp,int *num1,int *num2,int *num3);
-int ending_statis(Statis *statis);
+int ending_statis();
 int rematch_print(Monster s_mon_list[], int s_ran_num);
 int elx_use(Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp);
 
 int main(void)
 {
-    
     //intro();
     int i, j;
 
@@ -252,7 +234,7 @@ int main(void)
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	26,	21,	21,	19,	19,	6,	6,	6,	6,	6,	6,	8,	6,	6,	6,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	7,	7,	7,	7,	7,	7,	7,	7,	7,	7,	6,	6,	6,	6},
-    {-15,	0,	0,	0,	0,	0,	-5,	0,	0,	0,	0,	13,	0,	0,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	7,	7,	7,	7,	7,	7,	7,	7,	6,	6,	6,	6},
+    {0,	0,	0,	0,	0,	0,	-5,	0,	0,	0,	0,	13,	0,	0,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	21,	7,	7,	7,	7,	7,	7,	7,	7,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	21,	21,	19,	19,	6,	6,	6,	6,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	13,	0,	0,	0,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	21,	21,	21,	19,	6,	6,	8,	6,	6,	6,	6,	6},
     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	10,	0,	0,	0,	0,	0,	0,	0,	21,	21,	19,	6,	6,	6,	6,	6,	6,	6,	6},
@@ -693,7 +675,7 @@ int main(void)
     Item item ={2,0,0,0,0,0,0,0,4,0,2,3,100};
     
     Player player = {"복이", 10, 1000, 1000, 100, 100, 5000, 0, 100, 0, 5000, 0, 10, *p_skill_list};
-
+    
     W_inf w_inf[4] = {
         {"기본검", 2},
         {"장검", 5},
@@ -738,12 +720,7 @@ int main(void)
 
     Mul mul[11] = {{0,1},{1,1.1},{2,1.2},{3,1.3},{4,1.4},{5,1.5},{6,1.6},{7,1.7},{8,1.8},{9,1.9},{10,2}};
 
-    Eqp eqp = {7,0,8,0,6,0,0,6,0,0,0,0};
-
-    Statis statis = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    player.defence = (a_inf[eqp.a_t].def * mul[eqp.a_s].mul) + (s_inf[eqp.s_t].def * mul[eqp.s_s].mul) + (g_inf[eqp.g_t].def * mul[eqp.g_s].mul) + (c_inf[eqp.c_t].def * mul[eqp.c_s].mul) + (m_inf[eqp.m_t].def * mul[eqp.m_s].mul);
-
-    player.e_dmg = w_inf[eqp.w_t].dmg * mul[eqp.w_s].mul ;
+    Eqp eqp = {7,0,0,0,0,0,0,0,0,0,0,0};
     
     for(int i = 0; i < 6; i++)
     {
@@ -793,27 +770,26 @@ int main(void)
 
     int z, y, x, loc_x, loc_y, present_loc, s_loc_x, s_loc_y, s_loc_z;
     int min_x_view, max_x_view, min_y_view, max_y_view, cnt, temp, pp_loc, pp_loc_x, pp_loc_y;
-    int boss_die;
     
     loc_x = 0;     //현재 x
     loc_y = 0;     //현재 y
     present_loc = 0;  // 현재 층수
     pp_loc = 0;
 
-
+    s_loc_x = 0;  // 저장스크롤
+    s_loc_y = 0;  // 저장스크롤
+    s_loc_z = 0;  // 저장스크롤
 
     int save_x[s_cnt] ={ };
     int save_y[s_cnt] ={ };
     int save_z[s_cnt] ={ };
 
 
-
+    int money = 10000;
     int slot_play = 0;
     int prize1 = 0, prize2 = 0, prize3 = 0, prize4 = 0, prize5 = 0, prize6 = 0;
-    int n_kill_cnt = 0, s_kill_cnt = 0, b_kill_cnt = 0, move_cnt = 0, atk_cnt = 0, skill_cnt = 0, do_dmg_qty = 0, get_dmg_qty = 0, get_xp = 0, get_gold = 0;
     int mon_death, die_check, meet_check;
     int s_move_cnt = 0;
-    
    
     int qmyx[20][2];
     int qtemp[20];
@@ -838,7 +814,7 @@ int main(void)
         monster_make(map, copy_map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, &pp_loc);
         mon_death = 0;
         die_check = 0;
-        boss_die = 0;
+
         pp_loc_x = loc_x;
         pp_loc_y = loc_y;
         pp_loc = present_loc;
@@ -925,7 +901,7 @@ int main(void)
             printf(" 현재 장소 : 던전 %d 층\n", present_loc);
         }
 
-        player_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, bag, &player, &s_loc_x, &s_loc_y, &s_loc_z, &item, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, &eqp, save_x, save_y, save_z, &statis);
+        player_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, bag, &player, &s_loc_x, &s_loc_y, &s_loc_z, &item, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, &eqp, save_x, save_y, save_z);
 
         meet_check = 0;
             
@@ -937,7 +913,7 @@ int main(void)
                     {                        
                         if (loc_y == y && loc_x == x)
                         {
-                            die_check = fight(map, mon_list,s_mon_list, boss_list, &player, &present_mon, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, x_len, y_len, &item, &mon_death, bag, &statis, &boss_die);
+                            die_check = fight(map, mon_list,s_mon_list, boss_list, &player, &present_mon, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, x_len, y_len, &item, &mon_death, bag);
                                             
                             meet_check = 1;
                             break;                           
@@ -977,7 +953,7 @@ int main(void)
                     {
                         if (loc_y == y && loc_x == x)
                         {
-                            die_check = fight(map, mon_list,s_mon_list, boss_list, &player, &present_mon, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, x_len, y_len, &item, &mon_death, bag, &statis, &boss_die);
+                            die_check = fight(map, mon_list,s_mon_list, boss_list, &player, &present_mon, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, x_len, y_len, &item, &mon_death, bag);
 
                             meet_check = 1;
                             break;
@@ -1006,7 +982,7 @@ int main(void)
                 {
                     if (loc_y == y && loc_x == x)
                     {
-                        slot(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, &prize1, &prize2, &prize3, &prize4, &prize5, &prize6, &slot_play, &player, &statis);
+                        slot(map, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, &prize1, &prize2, &prize3, &prize4, &prize5, &prize6, &slot_play, &player);
                     }
                 }
                 else if (map[present_loc][y][x] == 11 )
@@ -1043,7 +1019,7 @@ int main(void)
                     {   
                         int bat_y = y;
                         int bat_x = x;
-                        battle_spot(map, mon_list, s_mon_list, boss_list, &player, &present_mon, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, x_len, y_len, &item, &mon_death, &bat_x, &bat_y, bag, &statis, &boss_die);
+                        battle_spot(map, mon_list, s_mon_list, boss_list, &player, &present_mon, &loc_x, &loc_y, &present_loc, &pp_loc_x, &pp_loc_y, x_len, y_len, &item, &mon_death, &bat_x, &bat_y, bag);
                     }
                 }
             }
@@ -1052,6 +1028,7 @@ int main(void)
     
     return 0;
 }
+
 
 int intro()
 {
@@ -1118,7 +1095,7 @@ int intro()
     getch();
 }
 
-void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt], Statis *statis)
+void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt])
 {
     int temp, temp1, temp2, temp3;
     int loc_x = *x;
@@ -1143,7 +1120,6 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
         if (*x > 0 && map[*p_loc][*y][(*x)-1] != 1 && map[*p_loc][*y][(*x)-1] != 6 && map[*p_loc][*y][(*x)-1] != 10 && map[*p_loc][*y][(*x)-1] != 12 && map[*p_loc][*y][(*x)-1] != 13 && map[*p_loc][*y][(*x)-1] != 19 && map[*p_loc][*y][(*x)-1] != 22 && map[*p_loc][*y][(*x)-1] != 23 && map[*p_loc][*y][(*x)-1] != 24 && map[*p_loc][*y][(*x)-1] != 25 && map[*p_loc][*y][(*x)-1] != 26 && map[*p_loc][*y][(*x)-1] != 28 && map[*p_loc][*y][(*x)-1] != 29 && map[*p_loc][*y][(*x)-1] != 30 && map[*p_loc][*y][(*x)-1] != 32 && map[*p_loc][*y][(*x)-1] != 34 && map[*p_loc][*y][(*x)-1] != 37)
         {        
             *x -= 1;
-            (statis->move_cnt)++;
         }            
     }
     else if (move == 68 || move == 100) // d↠
@@ -1152,8 +1128,7 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
        
         if (*x < xlen-1 && map[*p_loc][*y][(*x)+1] != 1 && map[*p_loc][*y][(*x)+1] != 6 && map[*p_loc][*y][(*x)+1] != 10 && map[*p_loc][*y][(*x)+1] != 12 && map[*p_loc][*y][(*x)+1] != 13 && map[*p_loc][*y][(*x)+1] != 19 && map[*p_loc][*y][(*x)+1] != 22 && map[*p_loc][*y][(*x)+1] != 23 && map[*p_loc][*y][(*x)+1] != 24 && map[*p_loc][*y][(*x)+1] != 25 && map[*p_loc][*y][(*x)+1] != 26 && map[*p_loc][*y][(*x)+1] != 28 && map[*p_loc][*y][(*x)+1] != 29 && map[*p_loc][*y][(*x)+1] != 30 && map[*p_loc][*y][(*x)+1] != 32 && map[*p_loc][*y][(*x)+1] != 34 && map[*p_loc][*y][(*x)+1] != 37)
         {
-            *x += 1;
-            (statis->move_cnt)++;         
+            *x += 1;          
         }     
     }
     else if (move == 87 || move == 119) // w위로
@@ -1163,7 +1138,6 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
         if (*y > 0 && map[*p_loc][(*y)-1][*x] != 1 && map[*p_loc][(*y)-1][*x] != 6 && map[*p_loc][(*y)-1][*x] != 10 && map[*p_loc][(*y)-1][*x] != 12 && map[*p_loc][(*y)-1][*x] != 13 && map[*p_loc][(*y)-1][*x] != 19 && map[*p_loc][(*y)-1][*x] != 22 && map[*p_loc][(*y)-1][*x] != 23 && map[*p_loc][(*y)-1][*x] != 24 && map[*p_loc][(*y)-1][*x] != 25 && map[*p_loc][(*y)-1][*x] != 26 && map[*p_loc][(*y)-1][*x] != 28 && map[*p_loc][(*y)-1][*x] != 29 && map[*p_loc][(*y)-1][*x] != 30 && map[*p_loc][(*y)-1][*x] != 32 && map[*p_loc][(*y)-1][*x] != 34 && map[*p_loc][(*y)-1][*x] != 37)
         {   
             *y -= 1;
-            (statis->move_cnt)++;
         }             
     }
     else if (move == 83 || move == 115) // s아래로
@@ -1172,7 +1146,6 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
         if (*y < ylen - 1 && map[*p_loc][(*y)+1][*x] != 1 && map[*p_loc][(*y)+1][*x] != 6 && map[*p_loc][(*y)+1][*x] != 10 && map[*p_loc][(*y)+1][*x] != 12 && map[*p_loc][(*y)+1][*x] != 13 && map[*p_loc][(*y)+1][*x] != 19 && map[*p_loc][(*y)+1][*x] != 22 && map[*p_loc][(*y)+1][*x] != 23 && map[*p_loc][(*y)+1][*x] != 24 && map[*p_loc][(*y)+1][*x] != 25 && map[*p_loc][(*y)+1][*x] != 26 && map[*p_loc][(*y)+1][*x] != 28 && map[*p_loc][(*y)+1][*x] != 29 && map[*p_loc][(*y)+1][*x] != 30 && map[*p_loc][(*y)+1][*x] != 32 && map[*p_loc][(*y)+1][*x] != 34 && map[*p_loc][(*y)+1][*x] != 37)
         {
             *y += 1;
-            (statis->move_cnt)++;
         }
     }
     else if(move == 73 || move == 105) // I 가방
@@ -1802,7 +1775,7 @@ void p_mon_put(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Mons
     }
 }
 
-int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster boss_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int xlen, int ylen, Item *item, int *mon_death, int bag[][4][6], Statis *statis, int *boss_die)
+int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster boss_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int xlen, int ylen, Item *item, int *mon_death, int bag[][4][6])
 {   
     system("clear");
     
@@ -1849,7 +1822,7 @@ int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster b
         enter(2);
         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
         
-        act_check = p_fight(map, mon_list, player, p_monster, x, y, p_loc, pp_x, pp_y, p_stirng, p_string1, p_string2, p_string3, p_string4, p_string5, item, m_stirng, statis);
+        act_check = p_fight(map, mon_list, player, p_monster, x, y, p_loc, pp_x, pp_y, p_stirng, p_string1, p_string2, p_string3, p_string4, p_string5, item, m_stirng);
 
         if (act_check == 0)
             return 0;
@@ -1860,35 +1833,28 @@ int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster b
         {
             if (p_monster->icon_num == -15)
             {
-                (statis->b_kill_cnt)++;
-                *boss_die = 1;
-                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag, statis);
+                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag);
                 re_appear = rand() % 100 + 1;
                 if (re_appear <= 5)
                 {                       
                     s_ran_mon = rand() % 4 -14;
                     map[*p_loc][*y][*x] = s_ran_mon;
                     rematch_print(s_mon_list, s_ran_mon);
-                    fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+                    fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
                     return 0;
                 }
                 else
                 {
-                    ending_statis(statis);
+                    ending_statis();
                     return 0;
                 }
             }
             else if (p_monster->icon_num >= -14 && p_monster->icon_num <= -10)
             {
-                (statis->s_kill_cnt)++;
-                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag, statis);
-                if (*boss_die == 1)
-                {
-                    ending_statis(statis);
-                }
+                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag);
                 re_appear = rand() % 100 + 1;
 
-                if (re_appear <= 30 && *boss_die != 1)
+                if (re_appear <= 30)
                 {   
                     while (1)
                     {
@@ -1901,7 +1867,7 @@ int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster b
 
                     map[*p_loc][*y][*x] = s_ran_mon;
                     rematch_print(s_mon_list, s_ran_mon);
-                    fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+                    fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
                     return 0;
                 }
                 else
@@ -1911,15 +1877,14 @@ int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster b
             }
             else if (p_monster->icon_num == -16)
             {
-                (statis->b_kill_cnt)++;
-                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag, statis);
+                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag);
                 re_appear = rand() % 100 + 1;
                 if (re_appear <= 10)
                 {   
                     s_ran_mon = rand() % 4 -14;
                     map[*p_loc][*y][*x] = s_ran_mon;
                     rematch_print(s_mon_list, s_ran_mon);
-                    fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+                    fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
                     return 0;
                 }
                 else
@@ -1929,15 +1894,14 @@ int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster b
             }
             else if (p_monster->icon_num == -17)
             {
-                (statis->b_kill_cnt)++;
-                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag, statis);
+                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag);
                 re_appear = rand() % 100 + 1;
                 if (re_appear <= 20)
                 {   
                     s_ran_mon = rand() % 4 -14;
                     map[*p_loc][*y][*x] = s_ran_mon;
                     rematch_print(s_mon_list, s_ran_mon);
-                    fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+                    fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
                     return 0;
                 }
                 else
@@ -1947,18 +1911,16 @@ int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster b
             }
             else
             {
-                (statis->n_kill_cnt)++;
-                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag, statis);
+                monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag);
                 return 0;
             }
         
         }
 
-        m_fight(map, mon_list, player, p_monster, x, y, p_loc, pp_x, pp_y, m_stirng, m_string1, m_string2, m_string3, m_string4, m_string5, m_string6, statis);
+        m_fight(map, mon_list, player, p_monster, x, y, p_loc, pp_x, pp_y, m_stirng, m_string1, m_string2, m_string3, m_string4, m_string5, m_string6);
 
         if (player->hp <= 0)
         {
-            (statis->die_cnt)++;
             player_die(map, player, p_monster, x, y, p_loc, item);
             return 2;
         }
@@ -1997,7 +1959,7 @@ int rematch_print(Monster s_mon_list[], int s_ran_num)
         return 0;
 }
 
-int monster_die(int map[][50][50], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, Item *item, int *mon_death, int bag[][4][6], Statis *statis)
+int monster_die(int map[][50][50], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, Item *item, int *mon_death, int bag[][4][6])
 {
     srand(time(NULL));
     int tel_cnt_ran, elx_cnt_ran, equip2_ch_ran, equip3_ch_ran, equip4_ch_ran;
@@ -2014,8 +1976,6 @@ int monster_die(int map[][50][50], Player *player, Monster *p_monster, int *x, i
     player->xp += p_monster->xp;
     player->gold += p_monster->gold;
     *mon_death = 1;
-    statis->get_xp += p_monster->xp;
-    statis->get_gold += p_monster->gold;
     
     // x : 31칸 / y :29칸
     system("clear");
@@ -2168,7 +2128,7 @@ int player_die(int map[][50][50], Player *player, Monster *p_monster, int *x, in
         return 0;
 }
 
-int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_string2[], char p_string3[], char p_string4[], char p_string5[], Item *item, char m_string[], Statis *statis)
+int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_string2[], char p_string3[], char p_string4[], char p_string5[], Item *item, char m_string[])
 {
     srand(time(NULL));
 
@@ -2189,9 +2149,7 @@ int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
     if (move == 49) // 기본 공격
     {
         p_monster->hp -= (player->dmg + player->e_dmg);
-        (statis->atk_cnt)++;
-        statis->do_dmg_qty += (player->dmg + player->e_dmg);
-
+        
         strcpy(p_string4, "");
         strcpy(p_string1, "기본공격으로 적에게 ");
         sprintf(p_string2, "%.1lf", player->dmg + player->e_dmg);
@@ -2204,7 +2162,7 @@ int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
     }
     else if (move == 50) // 스킬 사용
     {
-        back_chk = skill_use(map, mon_list, player, p_monster, x, y, p_loc, pp_x, pp_y, p_string, p_string1, p_string2, p_string3, p_string4, p_string5, statis);
+        back_chk = skill_use(map, mon_list, player, p_monster, x, y, p_loc, pp_x, pp_y, p_string, p_string1, p_string2, p_string3, p_string4, p_string5);
         if (back_chk == 2)
             return 2;
         else 
@@ -2225,7 +2183,6 @@ int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
         {
             *x = *pp_x;
             *y = *pp_y;
-            (statis->run_cnt)++;
             return 0;
         }
         else
@@ -2240,7 +2197,7 @@ int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
     }
 }
 
-int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char m_string[], char m_string1[], char m_string2[], char m_string3[], char m_string4[], char m_string5[], char m_string6[], Statis *statis)
+int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char m_string[], char m_string1[], char m_string2[], char m_string3[], char m_string4[], char m_string5[], char m_string6[])
 {
     int mon_rannum, i, j;
     int attack_dmg, true_dmg, skill_dmg, s_max_dmg, s_min_dmg, s_ran_num, s_max_rcv, s_min_rcv, skill_rcv;
@@ -2257,8 +2214,6 @@ int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
             true_dmg = 0;
 
         player->hp -= true_dmg;
-        statis->get_dmg_qty += true_dmg;
-
         strcpy(m_string4, "");
         strcpy(m_string1, "적의 기본공격으로 ");
         sprintf(m_string2, "%d", true_dmg);
@@ -2271,11 +2226,13 @@ int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
     }
     else
     {
+        attack_dmg = rand() % (p_monster->max_dmg - p_monster->min_dmg + 1) + p_monster->min_dmg;
 
         if (p_monster->snum <= 5)
         {
             for (i = 0; i < 16; i++)
-            {                
+            {
+                
                 if (p_monster->snum == (p_monster->m_skill_list)[i].cnum)
                 {
                     s_max_dmg = attack_dmg * (p_monster->m_skill_list)[i].max_dmg;
@@ -2287,7 +2244,6 @@ int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
                         true_dmg = 0;
 
                     player->hp -= true_dmg;
-                    statis->get_dmg_qty += true_dmg;
                     strcpy(m_string2, (p_monster->m_skill_list)[i].name);
                     break;
                 }
@@ -2307,7 +2263,6 @@ int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
                 true_dmg = 0;
 
             player->hp -= true_dmg;
-            statis->get_dmg_qty += true_dmg;
             strcpy(m_string2, (p_monster->m_skill_list)[s_ran_num].name);
         }
         else
@@ -2355,7 +2310,6 @@ int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
                                 true_dmg = 0;
 
                             player->hp -= true_dmg;
-                            statis->get_dmg_qty += true_dmg;
                             strcpy(m_string2, (p_monster->m_skill_list)[i].name);
                             break;
                         }                        
@@ -2371,7 +2325,6 @@ int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
                             true_dmg = 0;
 
                         player->hp -= true_dmg;
-                        statis->get_dmg_qty += true_dmg;
                         strcpy(m_string2, (p_monster->m_skill_list)[i+1].name);
                         break;
                     }
@@ -2394,7 +2347,7 @@ int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
     }
 }
 
-int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_string2[], char p_string3[], char p_string4[], char p_string5[], Statis *statis)
+int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_string2[], char p_string3[], char p_string4[], char p_string5[])
 {
     srand(time(NULL));
     char s_choice = 0;
@@ -2435,8 +2388,6 @@ int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_
             {
                 p_monster->hp -= skill_dmg;
                 player->mp -= (player->skill_list)[0].mp;
-                (statis->skill_cnt)++;
-                statis->do_dmg_qty += skill_dmg;
                 strcpy(p_string1, (player->skill_list)[0].name);
                 break;
             }
@@ -2456,8 +2407,6 @@ int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_
             {
                 p_monster->hp -= skill_dmg;
                 player->mp -= (player->skill_list)[1].mp;
-                (statis->skill_cnt)++;
-                statis->do_dmg_qty += skill_dmg;
                 strcpy(p_string1, (player->skill_list)[1].name);
                 break;
             }
@@ -2482,7 +2431,6 @@ int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_
                     player->hp = player->max_hp;
                 }
                 player->mp -= (player->skill_list)[2].mp;
-                (statis->skill_cnt)++;
 
                 strcpy(p_string5, "");
                 strcpy(p_string1, (player->skill_list)[2].name);
@@ -2513,8 +2461,6 @@ int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_
             {
                 p_monster->hp -= skill_dmg;
                 player->mp -= (player->skill_list)[3].mp;
-                (statis->skill_cnt)++;
-                statis->do_dmg_qty += skill_dmg;
                 strcpy(p_string1, (player->skill_list)[3].name);
                 break;
             }
@@ -2534,8 +2480,6 @@ int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_
             {
                 p_monster->hp -= skill_dmg;
                 player->mp -= (player->skill_list)[4].mp;
-                (statis->skill_cnt)++;
-                statis->do_dmg_qty += skill_dmg;
                 strcpy(p_string1, (player->skill_list)[4].name);
                 break;
             }
@@ -2555,8 +2499,6 @@ int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_
             {
                 p_monster->hp -= skill_dmg;
                 player->mp -= (player->skill_list)[5].mp;
-                (statis->skill_cnt)++;
-                statis->do_dmg_qty += skill_dmg;
                 strcpy(p_string1, (player->skill_list)[4].name);
                 break;
             }
@@ -2781,38 +2723,12 @@ void monster_make(int map[][50][50], int copy_map[][50][50], int xlen, int ylen,
     }
 }
 
-int ending_statis(Statis *statis)
-{   // x : 31칸 / y :29칸
-    system("clear");
-    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
-    enter(1);
-    printf("\t========================================================================\n");
-    printf("\t\t⢰⣴⡄⠀⣦⣦⠀⣠⢦⠦⠦⢦⣆⠀⣴⣴⠀⠀⢠⣦⡆⠀⠀⠀⠀⠀⠀⠀⠀⣦⡦⠀⠀⢴⣴⠀⠀⠴⠴⣴⡴⠴⠄⢰⣴⣄⡀⠀⣦⣦\n");
-    printf("\t\t⠸⢟⣆⣀⣟⠗⢀⣿⣓⠀⠀⣹⣟⠄⣟⣟⠀⠀⢘⣷⡇⠀⠀⠀⠀⠀⠀⠀⠀⣿⣓⢀⡀⣹⣟⡂⠀⠀⠀⣿⣫⠀⠀⢸⣻⣽⣖⣂⣟⣗\n");
-    printf("\t\t⠀⠈⣺⣺⠈⠀⠀⣞⡖⠀⠀⣒⣗⡂⣺⣺⠀⠀⢐⣗⡆⠀⠀⠀⠀⠀⠀⠀⠀⣗⣗⡖⣳⣲⣳⡀⠀⠀⠀⣷⣗⠀⠀⢐⣗⡇⠓⣗⣗⣗\n");
-    printf("\t\t⠀⠀⠛⠛⠀⠀⠀⠐⠛⠛⠛⠛⠂⠀⠀⠛⠛⠛⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠓⠀⠀⠚⠛⠀⠀⠛⠛⠛⠛⠛⠃⠘⠛⠃⠀⠀⠛⠛\n");
-    printf("\t========================================================================\n");
-    enter(1);
-    printf("\t\t   보스 '최상달'을 죽여서 게임에서 승리하였습니다!\n");
-    enter(1);
-    printf("   ────────────────────────────────《 게임 통계 》─────────────────────────────────\n");
-    printf("  │\t\t\t\t\t\t\t\t\t\t   │\n");
-    printf("  │\t  죽인 (일반)몬스터 수 : %-10d \t 죽인 (네임드)몬스터 수 : %-5d\t   │\n", statis->n_kill_cnt, statis->s_kill_cnt);
-    printf("  │\t  죽인 (보스)몬스터 수 : %-10d \t 플레이어 총 이동 횟수 : %-5d\t   │\n", statis->b_kill_cnt, statis->move_cnt);
-    printf("  │\t  일반공격 횟수 : %-10d \t\t 스킬공격 횟수 : %-10d\t   │\n", statis->atk_cnt, statis->skill_cnt);
-    printf("  │\t  적에게 입힌 총 데미지 : %-10d \t 적에게 받은 총 피해량 : %-5d\t   │\n", statis->do_dmg_qty, statis->get_dmg_qty);
-    printf("  │\t  플레이어 사망 횟수 : %-10d \t 플레이어 도망 횟수 : %-5d\t   │\n", statis->die_cnt, statis->run_cnt);
-    printf("  │\t  얻은 총 경험치 : %-10d \t\t 얻은 총 골드 : %-10d\t   │\n", statis->get_xp, statis->get_gold);
-    printf("  │\t\t\t\t\t\t\t\t\t\t   │\n");
-    printf("   ───────────────────────────────────────────────────────────────────────────────\n");
-    printf("\t\t\t\t\t\t(넘어가려면 아무키나 누르세요)\n");
-    enter(4);
-    printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
-    getch();
-    outro();
+int ending_statis()
+{
+
 }
 
-void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int *p1, int *p2, int *p3, int *p4, int *p5, int *p6, int *s_play, Player *player, Statis *statis)
+void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int *p1, int *p2, int *p3, int *p4, int *p5, int *p6, int *s_play, Player *player)
 {
     system("clear");
     printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
@@ -2888,7 +2804,7 @@ void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, i
                 in_money = 0;
                 continue;
                 }
-                else if(in_money <= player->gold)
+                else if(in_money < player->gold)
                 {
                     player->gold -= in_money;
                     num = (rand() % 100) + 1;
@@ -2909,7 +2825,6 @@ void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, i
                         (*p1)++;
                         (*s_play)++;
                         player->gold += in_money * prize[0];
-                        statis->get_gold += in_money * prize[0];
                         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
                         enter(9);
                         num_dot(1);
@@ -2923,7 +2838,6 @@ void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, i
                         (*p2)++;
                         (*s_play)++;
                         player->gold += in_money * prize[1];
-                        statis->get_gold += in_money * prize[1];
                         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
                         enter(9);
                         num_dot(2);
@@ -2937,7 +2851,6 @@ void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, i
                         (*p3)++;
                         (*s_play)++;
                         player->gold += in_money * prize[2];
-                        statis->get_gold += in_money * prize[2];
                         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
                         enter(9);
                         num_dot(3);
@@ -2951,7 +2864,6 @@ void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, i
                         (*p4)++;
                         (*s_play)++;
                         player->gold += in_money * prize[3];
-                        statis->get_gold += in_money * prize[3];
                         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
                         enter(9);
                         num_dot(4);
@@ -2965,7 +2877,6 @@ void slot(int map[][50][50], int *x, int *y, int *p_loc, int *pp_x, int *pp_y, i
                         (*p5)++;
                         (*s_play)++;
                         player->gold += in_money * prize[4];
-                        statis->get_gold += in_money * prize[4];
                         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
                         enter(9);
                         num_dot(5);
@@ -5335,7 +5246,7 @@ int buy()
     return cnt;
 }
 
-int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster boss_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int xlen, int ylen, Item *item, int *mon_death, int *bat_x, int *bat_y, int bag[][4][6], Statis *statis, int *boss_die)
+int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster boss_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, int xlen, int ylen, Item *item, int *mon_death, int *bat_x, int *bat_y, int bag[][4][6])
 {
     int i, m_ran_num;
     int m_cost[5] = {500, 1000, 1500, 2000, 3000};
@@ -5387,7 +5298,7 @@ int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Mon
             }
             player->gold -= m_cost[0];
             map[*p_loc][*y][*x] = -5;
-            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
             map[*p_loc][*bat_y][*bat_x] = 16;
             *x = *pp_x;
             *y = *pp_y;
@@ -5401,7 +5312,7 @@ int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Mon
             }
             player->gold -= m_cost[1];
             map[*p_loc][*y][*x] = -6;
-            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
             map[*p_loc][*bat_y][*bat_x] = 16;
             *x = *pp_x;
             *y = *pp_y;
@@ -5415,7 +5326,7 @@ int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Mon
             }
             player->gold -= m_cost[2];
             map[*p_loc][*y][*x] = -7;
-            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
             map[*p_loc][*bat_y][*bat_x] = 16;
             *x = *pp_x;
             *y = *pp_y;
@@ -5429,7 +5340,7 @@ int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Mon
             }
             player->gold -= m_cost[3];
             map[*p_loc][*y][*x] = -8;
-            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
             map[*p_loc][*bat_y][*bat_x] = 16;
             *x = *pp_x;
             *y = *pp_y;
@@ -5443,7 +5354,7 @@ int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Mon
             }
             player->gold -= m_cost[4];
             map[*p_loc][*y][*x] = -9;
-            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
             map[*p_loc][*bat_y][*bat_x] = 16;
             *x = *pp_x;
             *y = *pp_y;
@@ -5458,7 +5369,7 @@ int battle_spot(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Mon
             player->gold -= 5000;
             m_ran_num = rand() % 5 - 14;
             map[*p_loc][*y][*x] = m_ran_num;
-            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag, statis, boss_die);
+            fight(map, mon_list,s_mon_list, boss_list, player, p_monster, x, y, p_loc, pp_x, pp_y, x_len, y_len, item, mon_death, bag);
             map[*p_loc][*bat_y][*bat_x] = 16;
             *x = *pp_x;
             *y = *pp_y;
@@ -6535,7 +6446,7 @@ void interface(int bag[bag_z][bag_y][bag_x] ,Player *player,W_inf w_inf[], Mul m
     int m_s = eqp->m_s;
     int m_t = eqp->m_t; 
     
-    //double def =  (a_inf[a_t].def * mul[a_s].mul) + (s_inf[s_t].def * mul[s_s].mul) + (g_inf[g_t].def * mul[g_s].mul) + (c_inf[c_t].def * mul[c_s].mul) + (m_inf[m_t].def * mul[m_s].mul);
+    double def =  (a_inf[a_t].def * mul[a_s].mul) + (s_inf[s_t].def * mul[s_s].mul) + (g_inf[g_t].def * mul[g_s].mul) + (c_inf[c_t].def * mul[c_s].mul) + (m_inf[m_t].def * mul[m_s].mul);
     system("clear");
     printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
     enter(13);
@@ -6552,8 +6463,8 @@ void interface(int bag[bag_z][bag_y][bag_x] ,Player *player,W_inf w_inf[], Mul m
         printf("\t\t이름 : %s\t\t\t직업 : 전설의 용사\n\n", player->name);
         printf("\t\t레벨 : %d\t\t\t경험치 : %d / %d\n\n", player->level, player->xp,player->max_xp);
         printf("\t\t체력 : %.1lf / %.1lf\t\t마나 : %d / %d\n\n", player->hp, player->max_hp, player->mp, player->max_mp);
-        printf("\t\t공격력 : %.1lf\t\t\t무기 공격력 : %.1lf\n\n", player->dmg, player->e_dmg);
-        printf("\t\t총 공격력 : %.1f\t\t장비 방어력 : %.1lf\n\n", player->dmg + player->e_dmg , player->defence);
+        printf("\t\t공격력 : %.1lf\t\t\t무기 공격력 : %.1lf\n\n", player->dmg, w_inf[w_t].dmg * mul[w_s].mul);
+        printf("\t\t총 공격력 : %.1f\t\t장비 방어력 : %.1lf\n\n", player->dmg + w_inf[w_t].dmg * mul[w_s].mul , def);
         enter(8);
         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
         fflush(stdout);
@@ -7252,87 +7163,3 @@ void m_print(int m_m_m)
         printf("⠀⠀\t\t⠀⢀⢂⠢⡂⠢⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡼⡽⣝⢷⣝⢮⣪⣪⣞⡯⡯⡯⡯⣯⣗⣯⣻⢵⣕⡵⡽⣽⣺⣟⡆⠀⠀⠀\n");
     }
 }
-
-int outro() {
-    char *credits[] = {
-        "",
-        "\t\t\tThank you for playing",
-        "",
-        "\t\t\t팀 : 광산구 서구 ",
-        "",
-        "\t\t\t팀장 : 김민석   팀원:  신명호",
-        "",
-        "\t\t\t제작기간 : 8-20 ~ 8-29",
-        "",
-        "\t\t\t전투 : 신명호 ",
-        "",
-        "\t\t\t맵이동 : 신명호",
-        "",
-        "\t\t\t몬스터 : 신명호",
-        "",
-        "\t\t\t몬스터이동 로직 : 신명호",
-        "",
-        "\t\t\t아이템 드랍 : 신명호",
-        "",
-        "\t\t\tNPC : 김민석",
-        "",
-        "\t\t\t인터페이스 : 김민석",
-        "",
-        "\t\t\t소비아이템 : 김민석",
-        "",
-        "\t\t\t장비아이템 : 김민석",
-        "",
-        "\t\t\t사용된 구조체 : 14개",
-        "",
-        "\t\t\t만든 함수 : 44개 ",
-        "",
-        "\t\t\t사용된 변수 : 측정불가",
-        "",
-        "\t\t\t총 7338 줄",
-        "",
-        "\t\t\t글자수 : 220227 자",
-        "",
-        "\t\t\tSpecial Thanks to 최상문 교수님",
-        "",
-        NULL
-    };
-
-    int total_lines = 0;
-    while (credits[total_lines] != NULL) {
-        total_lines++;
-    }
-    
-
-    for (int i = 0; i < total_lines + 30; i++) {
-        system("clear");
-        for (int j = 0; j < 30; j++) {
-            int line = i + j - 30;
-            if (line >= 0 && line < total_lines) {
-                printf("%s\n", credits[line]);
-            } else {
-                printf("\n");
-            }
-        }
-        usleep(150000);
-    }
-    printf("╔═══════════════════════════════════════════════════════════════════════════════════════╗\n");
-    printf("║                                                                                       ║\n");
-    printf("║                                                                                       ║\n");
-    printf("║                 ╔════════════════════════════════════════════════╗                    ║\n");
-    printf("║                 ║             Press Enter To End                 ║                    ║\n");
-    printf("║                 ║             Press '1' To Continue              ║                    ║\n");
-    printf("║                 ╚════════════════════════════════════════════════╝                    ║\n");
-    printf("║                                                                                       ║\n");
-    printf("║                                                                                       ║\n");
-    printf("╚═══════════════════════════════════════════════════════════════════════════════════════╝\n");
-    char select = getch();
-    if (select == 49)
-    {
-
-    }
-    else
-    {
-        exit(0);
-    }
-}
-

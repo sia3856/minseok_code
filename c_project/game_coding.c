@@ -9,6 +9,7 @@
 #define z_len 8
 #define y_len 50
 #define x_len 50
+#define s_cnt 8
 // 가방 범위
 #define bag_x 6
 #define bag_y 4
@@ -182,13 +183,13 @@ void m_print(int m_m_m);
 int buy();
 int slot_intro();
 int num_dot(int num);
-void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,  int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp);
+void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,  int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt]);
 void monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2]);
-void s_monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc);
-int right_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk);
-int left_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk);
-int up_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk);
-int down_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *cnt, int skip_chk_arr[][2]);
+int s_monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *pp_x, int *pp_y, int *p_loc, int qmyx[][2]);
+int right_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt);
+int left_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt);
+int up_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt);
+int down_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *cnt, int skip_chk_arr[][2], int *q_cnt);
 int map_move(int xlen, int ylen, int *x, int *y, int *p_loc,Item *item); 
 void map_print(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc);
 void monster_make(int map[][50][50], int copy_map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc, int *pp_loc);
@@ -201,9 +202,9 @@ int player_die(int map[][50][50], Player *player, Monster *p_monster, int *x, in
 int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_stirng2[], char p_stirng3[], char p_string4[], char p_string5[], Item *item, char m_string[]);
 int m_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char m_string[], char m_string1[], char m_string2[], char m_string3[], char m_string4[], char m_string5[], char m_string6[]);
 int level_up(Player *player);
-int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp);
+int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt]);
 int potion(int *x, int *y,Player *player,Item *item);  // 포션 
-void tel_scl(int *x, int *y,int *p_loc,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item); // 순간이동 주문서
+void tel_scl(int *x, int *y,int *p_loc,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt]); // 순간이동 주문서
 int skill_use(int map[][50][50], Monster mon_list[], Player *player, Monster *p_monster, int *x, int *y, int *p_loc, int *pp_x, int *pp_y, char p_string[], char p_string1[], char p_string2[], char p_string3[], char p_string4[], char p_string5[]);
 void use_hpotion(double *hp, double *m_hp, int *potion_count, int amount, const char *type);
 void use_mpotion(int *mp, int *m_mp, int *potion_count, int amount, const char *type );
@@ -216,11 +217,13 @@ int upgrade_item(int bag[bag_z][bag_y][bag_x],Item *item,int *num1,int *num2,int
 void interface(int bag[bag_z][bag_y][bag_x] ,Player *player,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp);
 int wear_eqp(int bag[bag_z][bag_y][bag_x], W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp,int *num1,int *num2,int *num3);
 int ending_statis();
+int outro();
 int rematch_print(Monster s_mon_list[], int s_ran_num);
 int elx_use(Item *item,W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp);
 
 int main(void)
 {
+    
     //intro();
     int i, j;
 
@@ -672,8 +675,8 @@ int main(void)
     
     Item item ={2,0,0,0,0,0,0,0,4,0,2,3,100};
     
-    Player player = {"복이", 10, 1000, 1000, 100, 100, 10, 0, 100, 0, 5000, 0, 10, *p_skill_list};
-    
+    Player player = {"복이", 10, 1000, 1000, 100, 100, 5000, 0, 100, 0, 5000, 0, 10, *p_skill_list};
+
     W_inf w_inf[4] = {
         {"기본검", 2},
         {"장검", 5},
@@ -718,8 +721,12 @@ int main(void)
 
     Mul mul[11] = {{0,1},{1,1.1},{2,1.2},{3,1.3},{4,1.4},{5,1.5},{6,1.6},{7,1.7},{8,1.8},{9,1.9},{10,2}};
 
-    Eqp eqp = {7,0,0,0,0,0,0,0,0,0,0,0};
-    
+    Eqp eqp = {7,0,8,0,6,0,0,6,0,0,0,0};
+
+    player.defence = (a_inf[eqp.a_t].def * mul[eqp.a_s].mul) + (s_inf[eqp.s_t].def * mul[eqp.s_s].mul) + (g_inf[eqp.g_t].def * mul[eqp.g_s].mul) + (c_inf[eqp.c_t].def * mul[eqp.c_s].mul) + (m_inf[eqp.m_t].def * mul[eqp.m_s].mul);
+
+    player.e_dmg = w_inf[eqp.w_t].dmg * mul[eqp.w_s].mul ;
+
     for(int i = 0; i < 6; i++)
     {
         player.skill_list[i] = p_skill_list[i];
@@ -778,14 +785,20 @@ int main(void)
     s_loc_y = 0;  // 저장스크롤
     s_loc_z = 0;  // 저장스크롤
 
+    int save_x[s_cnt] ={ };
+    int save_y[s_cnt] ={ };
+    int save_z[s_cnt] ={ };
+
 
     int money = 10000;
     int slot_play = 0;
     int prize1 = 0, prize2 = 0, prize3 = 0, prize4 = 0, prize5 = 0, prize6 = 0;
     int mon_death, die_check, meet_check;
-
+    int s_move_cnt = 0;
+   
     int qmyx[20][2];
-
+    int qtemp[20];
+ 
     for (i = 0; i < 20; i++)
     {
         for (j = 0; j < 2; j++)
@@ -793,6 +806,12 @@ int main(void)
             qmyx[i][j] = -1;
         }
     }
+    for (i = 0; i < 20; i++)
+    {
+        qtemp[i] = 100;
+    }
+
+
     
     while (1)
     {  
@@ -835,14 +854,47 @@ int main(void)
         {
             for (x = min_x_view; x < max_x_view; x++)
             {  
+              
+                for (i = 0; i < 20; i++)
+                {
+                    if (qmyx[i][0] != -1 && !(map[present_loc][qmyx[i][0]][qmyx[i][1]] <= -5 && map[present_loc][qmyx[i][0]][qmyx[i][1]] >= -17))
+                    {
+                        qtemp[i] = map[present_loc][qmyx[i][0]][qmyx[i][1]];
+                        map[present_loc][qmyx[i][0]][qmyx[i][1]] = 43; 
+                    }
+                }
                 temp = map[present_loc][loc_y][loc_x];
                 map[present_loc][loc_y][loc_x] = 2;
                 map_print(map, x_len, y_len, z_len, &x, &y, &present_loc);
                 map[present_loc][loc_y][loc_x] = temp;
+                for (i = 0; i < 20; i++)
+                {
+                    if (qtemp[i] != 100 && !(map[present_loc][qmyx[i][0]][qmyx[i][1]] <= -5 && map[present_loc][qmyx[i][0]][qmyx[i][1]] >= -17))
+                    {
+                        map[present_loc][qmyx[i][0]][qmyx[i][1]] = qtemp[i];
+                    }
+                    
+                }
+
             }
             printf("\n");
         }
 
+
+
+        for (i = 0; i < 20; i++)
+        {
+            for (j = 0; j < 2; j++)
+            {
+                qmyx[i][j] = -1;
+            }
+        }
+        for (i = 0; i < 20; i++)
+        {
+            qtemp[i] = 100;
+        }
+
+        
         if (present_loc == 0)
         {   
             printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
@@ -854,7 +906,7 @@ int main(void)
             printf(" 현재 장소 : 던전 %d 층\n", present_loc);
         }
 
-        player_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, bag, &player, &s_loc_x, &s_loc_y, &s_loc_z, &item, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, &eqp);
+        player_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, bag, &player, &s_loc_x, &s_loc_y, &s_loc_z, &item, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, &eqp, save_x, save_y, save_z);
 
         meet_check = 0;
             
@@ -888,6 +940,13 @@ int main(void)
         {
             monster_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &present_loc, qmyx);
         }
+
+        if (pp_loc == present_loc && mon_death != 1)
+        {                       
+            s_monster_move(map, x_len, y_len, z_len, &loc_x, &loc_y, &pp_loc_x, &pp_loc_y, &present_loc, qmyx);
+                
+        }
+        
         
         meet_check = 0;
 
@@ -975,7 +1034,6 @@ int main(void)
     return 0;
 }
 
-
 int intro()
 {
     system("clear");
@@ -1041,7 +1099,7 @@ int intro()
     getch();
 }
 
-void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp)
+void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, int *p_loc,int bag[bag_z][bag_y][bag_x],Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt])
 {
     int temp, temp1, temp2, temp3;
     int loc_x = *x;
@@ -1096,7 +1154,7 @@ void player_move(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y
     }
     else if(move == 73 || move == 105) // I 가방
     {
-        p_bag_print(bag,x, y,p_loc,player, s_loc_x, s_loc_y, s_loc_z,item, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp);
+        p_bag_print(bag,x, y,p_loc,player, s_loc_x, s_loc_y, s_loc_z,item, w_inf, mul, a_inf, s_inf, g_inf, c_inf, m_inf, eqp, save_x, save_y, save_z);
     }
     else if(move == 79 || move == 111) // O 인터페이스
     {
@@ -1111,6 +1169,7 @@ void monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int
     int d_check, result;
     int skip_chk_arr[50][2];
     int move_chk, left_m_chk, right_m_chk, up_m_chk, down_m_chk;
+    int q_cnt = 0;
 
     for (i = 0; i < 50; i++)
     {
@@ -1156,28 +1215,28 @@ void monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int
 
                     if (ran_move == 1) // 좌
                     {
-                        move = left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk);
+                        move = left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
                         if (move == 1)
                             break;
                         left_m_chk = 1;               
                     }
                     else if (ran_move == 2) // 우
                     {
-                        move = right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk);
+                        move = right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
                         if (move == 1)
                             break;
                         right_m_chk = 1;                       
                     }
                     else if (ran_move == 3) // 상
                     {
-                        move = up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk);
+                        move = up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
                         if (move == 1)
                             break;
                         up_m_chk = 1;                     
                     }
                     else // 하
                     {
-                        move = down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr);
+                        move = down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
                         if (move == 1)
                             break;
                         down_m_chk = 1;                      
@@ -1192,13 +1251,17 @@ void monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int
     }
 }
 
-void s_monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc)
+int s_monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *pp_x, int *pp_y, int *p_loc, int qmyx[][2])
 {
     int y, x, mon, ran_move, i, j, y_min, y_max, x_min, x_max, yy, xx;
     int cnt = 0;
-    int d_check, result;
+    int q_cnt = 0;
+    int d_check, result, move;
     int skip_chk_arr[50][2];
     int move_chk, left_m_chk, right_m_chk, up_m_chk, down_m_chk;
+    int move_ran;
+    int smove_cnt = 0;
+    int find_cnt = 0;
 
     for (i = 0; i < 50; i++)
     {
@@ -1227,19 +1290,20 @@ void s_monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, i
                 continue;
             }
 
-
-            if (map[*p_loc][y][x] >= -14 && map[*p_loc][y][x] <= 10)
-            {                
+            if (map[*p_loc][y][x] >= -14 && map[*p_loc][y][x] <= -10)
+            {              
                 mon = map[*p_loc][y][x];
                 left_m_chk = 0;
                 right_m_chk = 0;
                 up_m_chk = 0;
                 down_m_chk = 0;
+                move_ran = 0;
+                srand(time(NULL));
                 
-                y_min = ((y-3) < 0)? 0 : y-3;
-                x_min = ((x-3) < 0)? 0 : x-3;
-                y_max = ((y+3) > 49)? 49 : y+3;
-                x_max = ((x+3) > 49)? 49 : x+3;
+                y_min = ((y-4) < 0)? 0 : y-4;
+                x_min = ((x-4) < 0)? 0 : x-4;
+                y_max = ((y+4) > 49)? 49 : y+4;
+                x_max = ((x+4) > 49)? 49 : x+4;
 
                 int find = 0;
                 for (yy = y_min; yy <= y_max; yy++)
@@ -1256,100 +1320,315 @@ void s_monster_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, i
                         break;
                 }            
                 if (find == 0)
-                    continue;
-    
-                while (1)
                 {
-                    ran_move =  rand() % 4 + 1;
-                    move_chk = 0;
+                    
+                    continue;
+                }
+                                  
+                if ((*pp_y - y) < 0 && *pp_x == x) // 상
+                {
+                    move = up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                    if (move == 1) 
+                        continue;                        
+                    while (1)
+                    {
+                        move_ran = rand() % 2;
+                        if (move_ran == 0)
+                        {
+                            move = left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            if (move == 1) 
+                                break;
+                            left_m_chk = 1;
+                        }
+                        else
+                        {
+                            move = right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            if (move == 1) 
+                                break;
+                            right_m_chk = 1;
+                        }
+                        if (left_m_chk == 1 && right_m_chk == 1)
+                            break;
+                    }
+                    continue;
+                }
+                else if ((*pp_y - y) < 0 && (*pp_x - x) > 0) // 우상
+                {
+                    if ((*pp_y - y) + (*pp_x - x) < 0) // 우상좌
+                    {
+                        move = up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                        if (move == 1) 
+                            continue;
+                        right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            continue;                        
+                    }
+                    else if ((*pp_y - y) + (*pp_x - x) == 0) // 우상중
+                    {                      
+                        while (1)
+                        {
+                            move_ran = rand() % 2;
+                            if (move_ran == 0)
+                            {
+                                move = up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                                if (move == 1) 
+                                    break;
+                                up_m_chk = 1;
+                            }
+                            else
+                            {
+                                move = right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                                if (move == 1) 
+                                    break;
+                                right_m_chk = 1;
+                            }
+                            if (up_m_chk == 1 && right_m_chk == 1)
+                                break;
+                        }
+                        continue;
+                    }
+                    else // 우상우
+                    {
+                        move = right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                        if (move == 1) 
+                            continue;
+                        up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            continue;
+                    }
 
-                    if (ran_move == 1) // 좌
+                }
+                else if (*pp_y == y && (*pp_x - x) > 0)  // 우
+                {
+                    move = right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                    if (move == 1) 
+                        continue;                        
+                    while (1)
                     {
-                        if (x > 0 && map[*p_loc][y][x-1] != 1 && map[*p_loc][y][x-1] != 6 && map[*p_loc][y][x-1] != 10 && map[*p_loc][y][x-1] != 12 && map[*p_loc][y][x-1] != 13 && map[*p_loc][y][x-1] != 19 && map[*p_loc][y][x-1] != 22 && map[*p_loc][y][x-1] != 23 && map[*p_loc][y][x-1] != 24 
-                        && map[*p_loc][y][x-1] != 25 && map[*p_loc][y][x-1] != 26 && map[*p_loc][y][x-1] != 28 && map[*p_loc][y][x-1] != 29 && map[*p_loc][y][x-1] != 30 && map[*p_loc][y][x-1] != 32 && map[*p_loc][y][x-1] != 34 && map[*p_loc][y][x-1] != 37 && map[*p_loc][y][x-1] != 4 
-                        && map[*p_loc][y][x-1] != 5 && map[*p_loc][y][x-1] != 31 && map[*p_loc][y][x-1] != 41 && map[*p_loc][y][x-1] != 7)
-                        {           
-                            if (!(map[*p_loc][y][x-1] >= -17 && map[*p_loc][y][x-1] <= -5))
-                            {            
-                                map[*p_loc][y][x] = 0;
-                                map[*p_loc][y][x-1] = mon;
-                                move_chk = 1;
+                        move_ran = rand() % 2;
+                        if (move_ran == 0)
+                        {
+                            move = up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            if (move == 1) 
                                 break;
+                            up_m_chk = 1;
+                        }
+                        else
+                        {
+                            move = down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
+                            if (move == 1) 
+                                break;
+                            down_m_chk = 1;
+                        }
+                        if (up_m_chk == 1 && down_m_chk == 1)
+                            break;
+                    }
+                    continue;
+                        
+                }
+                else if ((*pp_y - y) > 0 && (*pp_x - x) > 0) // 우하
+                {
+                    if ((*pp_y - y) - (*pp_x - x) > 0) //우하우
+                    {
+                        move = right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                        if (move == 1) 
+                            continue;
+                        down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
+                            continue;
+                    }
+                    else if ((*pp_y - y) - (*pp_x - x) == 0) // 우하중
+                    {
+                        while (1)
+                        {
+                            move_ran = rand() % 2;
+                            if (move_ran == 0)
+                            {
+                                move = right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                                if (move == 1) 
+                                    break;
+                                right_m_chk = 1;
                             }
-                        }
-                        left_m_chk = 1;               
-                    }
-                    else if (ran_move == 2) // 우
-                    {
-                        if (x < xlen-1 && map[*p_loc][y][x+1] != 1 && map[*p_loc][y][x+1] != 6 && map[*p_loc][y][x+1] != 10 && map[*p_loc][y][x+1] != 12 && map[*p_loc][y][x+1] != 13 && map[*p_loc][y][x+1] != 19 && map[*p_loc][y][x+1] != 22 && map[*p_loc][y][x+1] != 23 && map[*p_loc][y][x+1] != 24 
-                        && map[*p_loc][y][x+1] != 25 && map[*p_loc][y][x+1] != 26 && map[*p_loc][y][x+1] != 28 && map[*p_loc][y][x+1] != 29 && map[*p_loc][y][x+1] != 30 && map[*p_loc][y][x+1] != 32 && map[*p_loc][y][x+1] != 34 && map[*p_loc][y][x+1] != 37 && map[*p_loc][y][x+1] != 4 
-                        && map[*p_loc][y][x+1] != 5 && map[*p_loc][y][x+1] != 31 && map[*p_loc][y][x+1] != 41 && map[*p_loc][y][x+1] != 7)
-                        {
-                            if (!(map[*p_loc][y][x+1] >= -17 && map[*p_loc][y][x+1] <= -5))
-                            {            
-                                map[*p_loc][y][x] = 0;
-                                map[*p_loc][y][x+1] = mon;
-                                x++;
-                                move_chk = 1;
-                                break;
-                            }  
-                        }
-                        right_m_chk = 1;                       
-                    }
-                    else if (ran_move == 3) // 상
-                    {
-                        if (y > 0 && map[*p_loc][y-1][x] != 1 && map[*p_loc][y-1][x] != 6 && map[*p_loc][y-1][x] != 10 && map[*p_loc][y-1][x] != 12 && map[*p_loc][y-1][x] != 13 && map[*p_loc][y-1][x] != 19 && map[*p_loc][y-1][x] != 22 && map[*p_loc][y-1][x] != 23 && map[*p_loc][y-1][x] != 24 
-                        && map[*p_loc][y-1][x] != 25 && map[*p_loc][y-1][x] != 26 && map[*p_loc][y-1][x] != 28 && map[*p_loc][y-1][x] != 29 && map[*p_loc][y-1][x] != 30 && map[*p_loc][y-1][x] != 32 && map[*p_loc][y-1][x] != 34 && map[*p_loc][y-1][x] != 37 && map[*p_loc][y-1][x] != 4 
-                        && map[*p_loc][y-1][x] != 5 && map[*p_loc][y-1][x] != 31 && map[*p_loc][y-1][x] != 41 && map[*p_loc][y-1][x] != 7)
-                        {
-                            if (!(map[*p_loc][y-1][x] >= -17 && map[*p_loc][y-1][x] <= -5))
-                            {            
-                                map[*p_loc][y][x] = 0;
-                                map[*p_loc][y-1][x] = mon;
-                                move_chk = 1;
-                                break;
+                            else
+                            {
+                                move = down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
+                                if (move == 1) 
+                                    break;
+                                down_m_chk = 1;
                             }
-                        }
-                        up_m_chk = 1;                     
-                    }
-                    else // 하
-                    {
-                        if (y < ylen - 1 && map[*p_loc][y+1][x] != 1 && map[*p_loc][y+1][x] != 6 && map[*p_loc][y+1][x] != 10 && map[*p_loc][y+1][x] != 12 && map[*p_loc][y+1][x] != 13 && map[*p_loc][y+1][x] != 19 && map[*p_loc][y+1][x] != 22 && map[*p_loc][y+1][x] != 23 && map[*p_loc][y+1][x] != 24 
-                        && map[*p_loc][y+1][x] != 25 && map[*p_loc][y+1][x] != 26 && map[*p_loc][y+1][x] != 28 && map[*p_loc][y+1][x] != 29 && map[*p_loc][y+1][x] != 30 && map[*p_loc][y+1][x] != 32 && map[*p_loc][y+1][x] != 34 && map[*p_loc][y+1][x] != 37 && map[*p_loc][y+1][x] != 4 
-                        && map[*p_loc][y+1][x] != 5 && map[*p_loc][y+1][x] != 31 && map[*p_loc][y+1][x] != 41 && map[*p_loc][y+1][x] != 7)
-                        {
-                            if (!(map[*p_loc][y+1][x] >= -17 && map[*p_loc][y+1][x] <= -5))
-                            {            
-                                map[*p_loc][y][x] = 0;
-                                map[*p_loc][y+1][x] = mon;
-                                
-                                skip_chk_arr[cnt][0] = y+1;
-                                skip_chk_arr[cnt][1] = x;
-                                cnt++;
-                                move_chk = 1;
+                            if (right_m_chk == 1 && down_m_chk == 1)
                                 break;
-                            }     
+                              
                         }
-                        down_m_chk = 1;                      
+                        continue;
                     }
-                    if (move_chk == 1)
-                        break;
-                    if (left_m_chk == 1 && right_m_chk == 1 && up_m_chk == 1 && down_m_chk == 1)
-                        break;
+                    else // 우하좌
+                    {
+                        move = down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
+                        if (move == 1) 
+                            continue;
+                        right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            continue;
+                    }
+                    
+                }
+                else if ((*pp_y - y) > 0 && *pp_x == x) // 하
+                {
+                    move = down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
+                    if (move == 1) 
+                        continue;                        
+                    while (1)
+                    {
+                        move_ran = rand() % 2;
+                        if (move_ran == 0)
+                        {
+                            move = left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            if (move == 1) 
+                                break;
+                            left_m_chk = 1;
+                        }
+                        else
+                        {
+                            move = right_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            if (move == 1) 
+                                break;
+                            right_m_chk = 1;
+                        }
+                        if (left_m_chk == 1 && right_m_chk == 1)
+                            break;
+                    }
+                    continue;
+                }
+                else if ((*pp_y - y) > 0 && (*pp_x - x) < 0) // 좌하
+                {
+                    if ((*pp_y - y) + (*pp_x - x) > 0) // 좌하우
+                    {
+                        move = down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
+                        if (move == 1) 
+                            continue;
+                        left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            continue;
+                    }
+                    else if ((*pp_y - y) + (*pp_x - x) == 0) // 좌하중
+                    {
+                        while (1)
+                        {
+                            move_ran = rand() % 2;
+                            if (move_ran == 0)
+                            {
+                                move = down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
+                                if (move == 1) 
+                                    break;
+                                down_m_chk = 1;
+                            }
+                            else
+                            {
+                                move = left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                                if (move == 1) 
+                                    break;
+                                left_m_chk = 1;
+                            }
+                            if (down_m_chk == 1 && left_m_chk == 1)
+                                break;
+                        }
+                        continue;
+                    }
+                    else // 좌하좌
+                    {
+                        move = left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                        if (move == 1) 
+                            continue;
+                        down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
+                            continue;
+                    }
+                }
+                else if (*pp_y == y && (*pp_x - x) < 0) // 좌
+                {
+                    move = left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                    if (move == 1) 
+                        continue;                        
+                    while (1)
+                    {
+                        move_ran = rand() % 2;
+                        if (move_ran == 0)
+                        {
+                            move = up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            if (move == 1) 
+                                break;
+                            up_m_chk = 1;
+                        }
+                        else
+                        {
+                            move = down_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &cnt, skip_chk_arr, &q_cnt);
+                            if (move == 1) 
+                                break;
+                            down_m_chk = 1;
+                        }
+                        if (up_m_chk == 1 && down_m_chk == 1)
+                            break;
+                    }
+                    continue;
+                }
+                else if ((*pp_y - y) < 0 && (*pp_x - x) < 0) // 좌상
+                {
+                    if ((*pp_y - y) - (*pp_x - x) > 0) // 좌상좌
+                    {
+                        move = left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                        if (move == 1) 
+                            continue;
+                        up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            continue;
+                    }
+                    else if ((*pp_y - y) - (*pp_x - x) == 0) // 좌상중
+                    {
+                        while (1)
+                        {
+                            move_ran = rand() % 2;
+                            if (move_ran == 0)
+                            {
+                                move = left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                                if (move == 1) 
+                                    break;
+                                left_m_chk = 1;
+                            }
+                            else
+                            {
+                                move = up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                                if (move == 1) 
+                                    break;
+                                up_m_chk = 1;
+                            }
+                            if (left_m_chk == 1 && up_m_chk == 1)
+                                break;
+                                 
+                        }
+                        continue;
+                    }
+                    else // 좌상우
+                    {
+                        move = up_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                        if (move == 1) 
+                            continue;
+                        left_move(map, xlen, ylen, zlen, p_x, p_y, p_loc, qmyx, &x, &y,  &mon, &move_chk, &q_cnt);
+                            continue;
+                    }                
                 }
             }
         }
     }
 }
 
-int right_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk)
+int right_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt)
 {
     if (*x < xlen-1 && map[*p_loc][*y][*x+1] != 1 && map[*p_loc][*y][*x+1] != 6 && map[*p_loc][*y][*x+1] != 10 && map[*p_loc][*y][*x+1] != 12 && map[*p_loc][*y][*x+1] != 13 && map[*p_loc][*y][*x+1] != 19 && map[*p_loc][*y][*x+1] != 22 && map[*p_loc][*y][*x+1] != 23 && map[*p_loc][*y][*x+1] != 24 
     && map[*p_loc][*y][*x+1] != 25 && map[*p_loc][*y][*x+1] != 26 && map[*p_loc][*y][*x+1] != 28 && map[*p_loc][*y][*x+1] != 29 && map[*p_loc][*y][*x+1] != 30 && map[*p_loc][*y][*x+1] != 32 && map[*p_loc][*y][*x+1] != 34 && map[*p_loc][*y][*x+1] != 37 && map[*p_loc][*y][*x+1] != 4 
     && map[*p_loc][*y][*x+1] != 5 && map[*p_loc][*y][*x+1] != 31 && map[*p_loc][*y][*x+1] != 41 && map[*p_loc][*y][*x+1] != 7)
     {
         if (!(map[*p_loc][*y][*x+1] >= -17 && map[*p_loc][*y][*x+1] <= -5))
-        {            
+        {    
+            if (map[*p_loc][*y][*x] >= -14 && map[*p_loc][*y][*x] <= -10)
+            {
+                qmyx[*q_cnt][0] = *y-1;
+                qmyx[*q_cnt][1] = *x+1;
+                (*q_cnt)++;
+            }     
             map[*p_loc][*y][*x] = 0;
             map[*p_loc][*y][*x+1] = *mon;
             (*x)++;
@@ -1359,7 +1638,7 @@ int right_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p
     }
 }
 
-int left_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk)
+int left_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt)
 {
     if (*x > 0 && map[*p_loc][*y][*x-1] != 1 && map[*p_loc][*y][*x-1] != 6 && map[*p_loc][*y][*x-1] != 10 && map[*p_loc][*y][*x-1] != 12 && map[*p_loc][*y][*x-1] != 13 && map[*p_loc][*y][*x-1] != 19 && map[*p_loc][*y][*x-1] != 22 && map[*p_loc][*y][*x-1] != 23 && map[*p_loc][*y][*x-1] != 24 
         && map[*p_loc][*y][*x-1] != 25 && map[*p_loc][*y][*x-1] != 26 && map[*p_loc][*y][*x-1] != 28 && map[*p_loc][*y][*x-1] != 29 && map[*p_loc][*y][*x-1] != 30 && map[*p_loc][*y][*x-1] != 32 && map[*p_loc][*y][*x-1] != 34 && map[*p_loc][*y][*x-1] != 37 && map[*p_loc][*y][*x-1] != 4 
@@ -1367,6 +1646,12 @@ int left_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_
         {           
             if (!(map[*p_loc][*y][*x-1] >= -17 && map[*p_loc][*y][*x-1] <= -5))
             {            
+                if (map[*p_loc][*y][*x] >= -14 && map[*p_loc][*y][*x] <= -10)
+                {
+                    qmyx[*q_cnt][0] = *y-1;
+                    qmyx[*q_cnt][1] = *x-1;
+                    (*q_cnt)++;
+                }     
                 map[*p_loc][*y][*x] = 0;
                 map[*p_loc][*y][*x-1] = *mon;
                 *move_chk = 1;
@@ -1375,7 +1660,7 @@ int left_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_
         }
 }
 
-int up_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk)
+int up_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *q_cnt)
 {
     if (*y > 0 && map[*p_loc][*y-1][*x] != 1 && map[*p_loc][*y-1][*x] != 6 && map[*p_loc][*y-1][*x] != 10 && map[*p_loc][*y-1][*x] != 12 && map[*p_loc][*y-1][*x] != 13 && map[*p_loc][*y-1][*x] != 19 && map[*p_loc][*y-1][*x] != 22 && map[*p_loc][*y-1][*x] != 23 && map[*p_loc][*y-1][*x] != 24 
     && map[*p_loc][*y-1][*x] != 25 && map[*p_loc][*y-1][*x] != 26 && map[*p_loc][*y-1][*x] != 28 && map[*p_loc][*y-1][*x] != 29 && map[*p_loc][*y-1][*x] != 30 && map[*p_loc][*y-1][*x] != 32 && map[*p_loc][*y-1][*x] != 34 && map[*p_loc][*y-1][*x] != 37 && map[*p_loc][*y-1][*x] != 4 
@@ -1383,6 +1668,12 @@ int up_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y,
     {
         if (!(map[*p_loc][*y-1][*x] >= -17 && map[*p_loc][*y-1][*x] <= -5))
         {            
+            if (map[*p_loc][*y][*x] >= -14 && map[*p_loc][*y][*x] <= -10)
+            {
+                qmyx[*q_cnt][0] = *y-2;
+                qmyx[*q_cnt][1] = *x;
+                (*q_cnt)++;
+            }     
             map[*p_loc][*y][*x] = 0;
             map[*p_loc][*y-1][*x] = *mon;
             *move_chk = 1;
@@ -1391,7 +1682,7 @@ int up_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y,
     }
 }
 
-int down_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *cnt, int skip_chk_arr[][2])
+int down_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_y, int *p_loc, int qmyx[][2], int *x, int *y, int *mon, int *move_chk, int *cnt, int skip_chk_arr[][2], int *q_cnt)
 {
     if (*y < ylen - 1 && map[*p_loc][*y+1][*x] != 1 && map[*p_loc][*y+1][*x] != 6 && map[*p_loc][*y+1][*x] != 10 && map[*p_loc][*y+1][*x] != 12 && map[*p_loc][*y+1][*x] != 13 && map[*p_loc][*y+1][*x] != 19 && map[*p_loc][*y+1][*x] != 22 && map[*p_loc][*y+1][*x] != 23 && map[*p_loc][*y+1][*x] != 24 
     && map[*p_loc][*y+1][*x] != 25 && map[*p_loc][*y+1][*x] != 26 && map[*p_loc][*y+1][*x] != 28 && map[*p_loc][*y+1][*x] != 29 && map[*p_loc][*y+1][*x] != 30 && map[*p_loc][*y+1][*x] != 32 && map[*p_loc][*y+1][*x] != 34 && map[*p_loc][*y+1][*x] != 37 && map[*p_loc][*y+1][*x] != 4 
@@ -1399,6 +1690,12 @@ int down_move(int map[][50][50], int xlen, int ylen, int zlen, int *p_x, int *p_
     {
         if (!(map[*p_loc][*y+1][*x] >= -17 && map[*p_loc][*y+1][*x] <= -5))
         {            
+            if (map[*p_loc][*y][*x] >= -14 && map[*p_loc][*y][*x] <= -10)
+            {
+                qmyx[*q_cnt][0] = *y;
+                qmyx[*q_cnt][1] = *x;
+                (*q_cnt)++;
+            }                 
             map[*p_loc][*y][*x] = 0;
             map[*p_loc][*y+1][*x] = *mon;
             
@@ -1459,8 +1756,8 @@ void p_mon_put(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Mons
             gold_rannum = rand() % (s_mon_list[i].max_gold - s_mon_list[i].min_gold + 1) + s_mon_list[i].min_gold;
             xp_rannum = rand() % (s_mon_list[i].max_xp - s_mon_list[i].min_xp + 1) + s_mon_list[i].min_xp;
 
-            p_monster->full_hp = (player->max_hp) * (s_mon_list[i].mul_hp);
-            p_monster->hp = (player->max_hp) * (s_mon_list[i].mul_hp);
+            p_monster->full_hp = (player->hp) * (s_mon_list[i].mul_hp);
+            p_monster->hp = (player->hp) * (s_mon_list[i].mul_hp);
             p_monster->gold = gold_rannum;
             p_monster->xp = xp_rannum;
         }
@@ -1474,8 +1771,8 @@ void p_mon_put(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Mons
             gold_rannum = rand() % (boss_list[i].max_gold - boss_list[i].min_gold + 1) + boss_list[i].min_gold;
             xp_rannum = rand() % (boss_list[i].max_xp - boss_list[i].min_xp + 1) + boss_list[i].min_xp;
 
-            p_monster->full_hp = (player->max_hp) * (boss_list[i].mul_hp);
-            p_monster->hp = (player->max_hp) * (boss_list[i].mul_hp);
+            p_monster->full_hp = (player->hp) * (boss_list[i].mul_hp);
+            p_monster->hp = (player->hp) * (boss_list[i].mul_hp);
             p_monster->gold = gold_rannum;
             p_monster->xp = xp_rannum;
         }
@@ -1561,7 +1858,7 @@ int fight(int map[][50][50], Monster mon_list[], Monster s_mon_list[], Monster b
                 monster_die(map, player, p_monster, x, y, p_loc, item, mon_death, bag);
                 re_appear = rand() % 100 + 1;
 
-                if (re_appear <= 50)
+                if (re_appear <= 30)
                 {   
                     while (1)
                     {
@@ -1848,6 +2145,7 @@ int p_fight (int map[][50][50], Monster mon_list[], Player *player, Monster *p_m
     enter(1);
     printf("\t%s\n", p_string);
     printf(".........................................................................\n\n");
+    usleep(500000);    
     printf("\t%s\n", m_string);
     move = getch();
 
@@ -2743,6 +3041,9 @@ void map_print(int map[][50][50], int xlen, int ylen, int zlen, int *x, int *y, 
     case 42:
         printf(" 🏥");
         break;
+    case 43:
+        printf(" ❔");
+        break;
     case -1:
         printf(" ▫ ");
         break;
@@ -2823,17 +3124,17 @@ void enter(int num)
 
 int slot_intro()
 {
-    enter(8);
-    printf("   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ \n");
-    printf("   ⬜️ 🟥 🟥 🟥 🟥 🟥 ⬜️   ⬜️ 🟥 🟥 🟥 🟥 🟥 ⬜️   ⬜️ 🟥 🟥 🟥 🟥 🟥 ⬜️ \n");
-    printf("   ⬜️ 🟥 ⬜️ ⬜️ ⬜️ 🟥 ⬜️   ⬜️ 🟥 ⬜️ ⬜️ ⬜️ 🟥 ⬜️   ⬜️ 🟥 ⬜️ ⬜️ ⬜️ 🟥 ⬜️ \n");
-    printf("   ⬜️ 🟥 ⬜️ ⬜️ 🟥 ⬜️ ⬜️   ⬜️ 🟥 ⬜️ ⬜️ 🟥 ⬜️ ⬜️   ⬜️ 🟥 ⬜️ ⬜️ 🟥 ⬜️ ⬜️ \n");
-    printf("   ⬜️ ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ \n");
-    printf("   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️ \n");
-    printf("   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️ \n");
-    printf("   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️ \n");
-    printf("   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ \n");
-    enter(11);
+    enter(9);
+    printf("  \t⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ \n");
+    printf("  \t⬜️ 🟥 🟥 🟥 🟥 🟥 ⬜️   ⬜️ 🟥 🟥 🟥 🟥 🟥 ⬜️   ⬜️ 🟥 🟥 🟥 🟥 🟥 ⬜️ \n");
+    printf("  \t⬜️ 🟥 ⬜️ ⬜️ ⬜️ 🟥 ⬜️   ⬜️ 🟥 ⬜️ ⬜️ ⬜️ 🟥 ⬜️   ⬜️ 🟥 ⬜️ ⬜️ ⬜️ 🟥 ⬜️ \n");
+    printf("  \t⬜️ 🟥 ⬜️ ⬜️ 🟥 ⬜️ ⬜️   ⬜️ 🟥 ⬜️ ⬜️ 🟥 ⬜️ ⬜️   ⬜️ 🟥 ⬜️ ⬜️ 🟥 ⬜️ ⬜️ \n");
+    printf("  \t⬜️ ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ \n");
+    printf("  \t⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️ \n");
+    printf("  \t⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️ \n");
+    printf("  \t⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ 🟥 ⬜️ ⬜️ ⬜️ ⬜️ \n");
+    printf("  \t⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️   ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ ⬜️ \n");
+    enter(9);
     printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
     usleep(1500000);
 
@@ -2936,7 +3237,7 @@ int num_dot(int num)
     }
 }
 
-int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp)
+int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *player,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, W_inf w_inf[], Mul mul[], A_inf a_inf[], S_inf s_inf[], G_inf g_inf[], C_inf c_inf[], M_inf m_inf[], Eqp *eqp, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt])
 {
     char select = 0;
     int num1, num2, num3;
@@ -3909,7 +4210,7 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
             }
             else if(select == 50)
             {
-                tel_scl(x, y,p_loc,s_loc_x,s_loc_y,s_loc_z,item);
+                tel_scl(x, y,p_loc,s_loc_x,s_loc_y,s_loc_z,item, save_x, save_y, save_z);
                 break;
             }
             else if(select == 51 && item->scroll_v != 0)
@@ -3969,15 +4270,15 @@ int p_bag_print(int bag[bag_z][bag_y][bag_x],int *x, int *y,int *p_loc,Player *p
     }
 }
 
-void tel_scl(int *x, int *y,int *p_loc,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item)
+void tel_scl(int *x, int *y,int *p_loc,int *s_loc_x, int *s_loc_y,int *s_loc_z,Item *item, int save_x[s_cnt], int save_y[s_cnt], int save_z[s_cnt])
 {
     char select;
+    int cnt; 
     system("clear");
     printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
-    enter(11);
+    enter(12);
     printf("          \t\t\t1 : 순간이동 주문서(저장)   %d 개 \n\n",item->scroll_s);
-    printf("          \t\t\t2 : 순간이동 주문서(이동)   %d 개 \n\n",item->scroll_m);    
-    printf("          \t\t\t저장된 좌표 : %d층   x : %d   y : %d \n", *s_loc_z, *s_loc_x ,*s_loc_y);
+    printf("          \t\t\t2 : 순간이동 주문서(이동)   %d 개 \n\n",item->scroll_m);      
     enter(11);
     printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
     select = getch();
@@ -3985,35 +4286,282 @@ void tel_scl(int *x, int *y,int *p_loc,int *s_loc_x, int *s_loc_y,int *s_loc_z,I
     {
         system("clear");
         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
-        enter(13);
-        printf("          \t\t\t현재 좌표를 저장합니다.\n");
-        enter(13);
+        enter(6);
+        for(cnt = 0; cnt<=7; cnt++)
+        printf("          \t\t\t%d. %d층   x : %d   y : %d \n\n", cnt+1, save_z[cnt], save_x[cnt], save_y[cnt]);
+        enter(5);
         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
-        *s_loc_x = *x;
-        *s_loc_y = *y;
-        *s_loc_z = *p_loc;
-        item->scroll_s -= 1;
-        item->scroll_m += 1;
+        select = getch();
+        switch(select){
+            case 49:
+                save_x[0] = *x;
+                save_y[0] = *y;
+                save_z[0] = *p_loc;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t현재 좌표를 저장합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                item->scroll_s -= 1;
+                item->scroll_m += 1;
+                sleep(1);
+                break;
+            case 50:
+                save_x[1] = *x;
+                save_y[1] = *y;
+                save_z[1] = *p_loc;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t현재 좌표를 저장합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                item->scroll_s -= 1;
+                item->scroll_m += 1;
+                sleep(1);
+                break;
+            case 51:
+                save_x[2] = *x;
+                save_y[2] = *y;
+                save_z[2] = *p_loc;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t현재 좌표를 저장합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                item->scroll_s -= 1;
+                item->scroll_m += 1;
+                sleep(1);
+                break;
+            case 52:
+                save_x[3] = *x;
+                save_y[3] = *y;
+                save_z[3] = *p_loc;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t현재 좌표를 저장합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                item->scroll_s -= 1;
+                item->scroll_m += 1;
+                sleep(1);
+                break;
+            case 53:
+                save_x[4] = *x;
+                save_y[4] = *y;
+                save_z[4] = *p_loc;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t현재 좌표를 저장합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                item->scroll_s -= 1;
+                item->scroll_m += 1;
+                sleep(1);
+                break;
+            case 54:
+                save_x[5] = *x;
+                save_y[5] = *y;
+                save_z[5] = *p_loc;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t현재 좌표를 저장합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                item->scroll_s -= 1;
+                item->scroll_m += 1;
+                sleep(1);
+                break;
+            case 55:
+                save_x[6] = *x;
+                save_y[6] = *y;
+                save_z[6] = *p_loc;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t현재 좌표를 저장합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                item->scroll_s -= 1;
+                item->scroll_m += 1;
+                sleep(1);
+                break;
+            case 56:
+                save_x[7] = *x;
+                save_y[7] = *y;
+                save_z[7] = *p_loc;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t현재 좌표를 저장합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                item->scroll_s -= 1;
+                item->scroll_m += 1;
+                sleep(1);
+                break;
+            default:
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t잘못 입력했습니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+        }  
     }
     else if(select == 50 && item->scroll_m != 0)
     {
         system("clear");
         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+        enter(6);
+        for(cnt = 0; cnt<=7; cnt++)
+        printf("          \t\t\t%d. %d층   x : %d   y : %d \n\n", cnt+1, save_z[cnt], save_x[cnt], save_y[cnt]);
+        enter(5);
+        printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+        select = getch();
+        switch(select){
+            case 49:
+                *x = save_x[0];
+                *y = save_y[0];
+                *p_loc = save_z[0];
+                item->scroll_m -= 1;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t저장된 좌표를 이동합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+            case 50:
+                *x = save_x[1];
+                *y = save_y[1];
+                *p_loc = save_z[1];
+                item->scroll_m -= 1;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t저장된 좌표를 이동합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+            case 51:
+                *x = save_x[2];
+                *y = save_y[2];
+                *p_loc = save_z[2];
+                item->scroll_m -= 1;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t저장된 좌표를 이동합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+            case 52:
+                *x = save_x[3];
+                *y = save_y[3];
+                *p_loc = save_z[3];
+                item->scroll_m -= 1;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t저장된 좌표를 이동합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+            case 53:
+                *x = save_x[4];
+                *y = save_y[4];
+                *p_loc = save_z[4];
+                item->scroll_m -= 1;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t저장된 좌표를 이동합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+            case 54:
+                *x = save_x[5];
+                *y = save_y[5];
+                *p_loc = save_z[5];
+                item->scroll_m -= 1;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t저장된 좌표를 이동합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+            case 55:
+                *x = save_x[6];
+                *y = save_y[6];
+                *p_loc = save_z[6];
+                item->scroll_m -= 1;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t저장된 좌표를 이동합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+            case 56:
+                *x = save_x[7];
+                *y = save_y[7];
+                *p_loc = save_z[7];
+                item->scroll_m -= 1;
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t저장된 좌표를 이동합니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+            default:
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t잘못 입력했습니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+                break;
+        }
+    }
+    else if(item->scroll_s == 0 || item->scroll_m == 0)
+            {
+                system("clear");
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                enter(13);
+                printf("          \t\t\t아이템이 없습니다.\n");
+                enter(13);
+                printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+                sleep(1);
+            }
+    else
+    {
+        system("clear");
+        printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
         enter(13);
-        printf("          \t\t\t저장된 좌표를 이동합니다.\n");
+        printf("          \t\t\t잘못 입력했습니다.\n");
         enter(13);
         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
-        *x = *s_loc_x;
-        *y = *s_loc_y;
-        *p_loc = *s_loc_z;
-        item->scroll_m -= 1;
+        sleep(1);
     }
-    else
-            {
-                *x = *x;
-                *y = *y;
-            }
-    
 }
 
 void use_hpotion(double *hp, double *m_hp, int *potion_count, int amount, const char *type )
@@ -4118,9 +4666,10 @@ int potion(int *x, int *y, Player *player, Item *item)
             system("clear");
             printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
             enter(14);
-            printf("              \t\t\t아무 키를 입력하시오.");
+            printf("              \t\t\t잘못 입력했습니다.");
             enter(13);
             printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
+            sleep(1);
             break;
     }
 }
@@ -5901,7 +6450,7 @@ void interface(int bag[bag_z][bag_y][bag_x] ,Player *player,W_inf w_inf[], Mul m
     int m_s = eqp->m_s;
     int m_t = eqp->m_t; 
     
-    double def =  (a_inf[a_t].def * mul[a_s].mul) + (s_inf[s_t].def * mul[s_s].mul) + (g_inf[g_t].def * mul[g_s].mul) + (c_inf[c_t].def * mul[c_s].mul) + (m_inf[m_t].def * mul[m_s].mul);
+    //double def =  (a_inf[a_t].def * mul[a_s].mul) + (s_inf[s_t].def * mul[s_s].mul) + (g_inf[g_t].def * mul[g_s].mul) + (c_inf[c_t].def * mul[c_s].mul) + (m_inf[m_t].def * mul[m_s].mul);
     system("clear");
     printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
     enter(13);
@@ -5918,8 +6467,8 @@ void interface(int bag[bag_z][bag_y][bag_x] ,Player *player,W_inf w_inf[], Mul m
         printf("\t\t이름 : %s\t\t\t직업 : 전설의 용사\n\n", player->name);
         printf("\t\t레벨 : %d\t\t\t경험치 : %d / %d\n\n", player->level, player->xp,player->max_xp);
         printf("\t\t체력 : %.1lf / %.1lf\t\t마나 : %d / %d\n\n", player->hp, player->max_hp, player->mp, player->max_mp);
-        printf("\t\t공격력 : %.1lf\t\t\t무기 공격력 : %.1lf\n\n", player->dmg, w_inf[w_t].dmg * mul[w_s].mul);
-        printf("\t\t총 공격력 : %.1f\t\t장비 방어력 : %.1lf\n\n", player->dmg + w_inf[w_t].dmg * mul[w_s].mul , def);
+        printf("\t\t공격력 : %.1lf\t\t\t무기 공격력 : %.1lf\n\n", player->dmg, player->e_dmg);
+        printf("\t\t총 공격력 : %.1f\t\t장비 방어력 : %.1lf\n\n", player->dmg + player->e_dmg , player->defence);
         enter(8);
         printf("═════════════════════════════════════════════════════════════════════════════════════════\n");
         fflush(stdout);
@@ -6618,3 +7167,69 @@ void m_print(int m_m_m)
         printf("⠀⠀\t\t⠀⢀⢂⠢⡂⠢⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡼⡽⣝⢷⣝⢮⣪⣪⣞⡯⡯⡯⡯⣯⣗⣯⣻⢵⣕⡵⡽⣽⣺⣟⡆⠀⠀⠀\n");
     }
 }
+
+int outro() {
+    char *credits[] = {
+        "",
+        "\t\t\tThank you for playing",
+        "",
+        "\t\t\t팀 : 광산구 서구 ",
+        "",
+        "\t\t\t팀장 : 김민석   팀원:  신명호",
+        "",
+        "\t\t\t제작기간 : 8-20 ~ 8-29",
+        "",
+        "\t\t\t전투 : 신명호 ",
+        "",
+        "\t\t\t맵이동 : 신명호",
+        "",
+        "\t\t\t몬스터 : 신명호",
+        "",
+        "\t\t\t몬스터이동 로직 : 신명호",
+        "",
+        "\t\t\t아이템 드랍 : 신명호",
+        "",
+        "\t\t\tNPC : 김민석",
+        "",
+        "\t\t\t인터페이스 : 김민석",
+        "",
+        "\t\t\t소비아이템 : 김민석",
+        "",
+        "\t\t\t장비아이템 : 김민석",
+        "",
+        "\t\t\t사용된 구조체 : 14개",
+        "",
+        "\t\t\t만든 함수 : 44개 ",
+        "",
+        "\t\t\t사용된 변수 : 측정불가",
+        "",
+        "\t\t\t총 n 줄",
+        "",
+        "\t\t\t글자수 : ???",
+        "",
+        "\t\t\tSpecial Thanks to 최상문 교수님",
+        "",
+        NULL
+    };
+
+    int total_lines = 0;
+    while (credits[total_lines] != NULL) {
+        total_lines++;
+    }
+    
+
+    for (int i = 0; i < total_lines + 30; i++) {
+        //printf("\033[H\033[J"); 
+        system("clear");
+        for (int j = 0; j < 30; j++) {
+            int line = i + j - 30;
+            if (line >= 0 && line < total_lines) {
+                printf("%s\n", credits[line]);
+            } else {
+                printf("\n");
+            }
+        }
+        usleep(150000);
+    }
+}
+

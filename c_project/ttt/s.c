@@ -54,10 +54,7 @@ int main(int argc, char *argv[])
 	{
 		clnt_adr_sz = sizeof(clnt_adr);
 		clnt_sock = accept(serv_sock, (struct sockaddr *)&clnt_adr, &clnt_adr_sz);
-		pthread_mutex_lock(&mutx);
 		login(&clnt_sock);
-		
-		pthread_mutex_unlock(&mutx);
 
 		pthread_mutex_lock(&mutx);
 		clnt_socks[clnt_cnt++] = clnt_sock;
@@ -78,7 +75,6 @@ void *handle_clnt(void *arg)
 	int clnt_sock = *((int *)arg);
 	int str_len = 0, i;
 	char msg[BUF_SIZE];
-
 	while ((str_len = read(clnt_sock, msg, sizeof(msg))) != 0)
 	{
 		send_msg(msg, str_len);
@@ -144,7 +140,6 @@ void login(void *arg)
 				continue;
 			}		 
 			User newUser;
-			printf("%s",r_i);
 			write(clnt_sock, r_i, strlen(r_i));
 			read(clnt_sock, newUser.id, sizeof(newUser.id));
 			newUser.id[strlen(newUser.id)-1] = '\0';
@@ -158,6 +153,46 @@ void login(void *arg)
 			read(clnt_sock, cnt, sizeof(cnt));
 			break;
 			
+		}
+		else if (strcmp(cnt, "2") == 0)
+		{
+			FILE *fp = fopen("user.txt", "r");   //  test 파일을 읽기모드로 실행
+            if (fp == NULL)
+            {
+                write(clnt_sock, o_f, strlen(o_f));
+                continue;
+                ;
+            }
+
+            char in_id[20];
+            char in_pw[20];
+			write(clnt_sock,"로그인 - ID 입력: ",strlen("로그인 - ID 입력: "));
+			read(clnt_sock, in_id, sizeof(in_id));
+			in_id[strlen(in_id)-1] = '\0';
+			printf("%s\n",in_id);
+
+			write(clnt_sock,"로그인 - 비밀번호 입력: ",strlen("로그인 - 비밀번호 입력: "));
+			read(clnt_sock, in_pw, sizeof(in_pw));
+			in_pw[strlen(in_pw)-1] = '\0';
+			printf("%s",in_pw);
+
+			User user;
+            while (fread(&user, sizeof(User), 1, fp))   //  파일을 읽는동안~~~
+            {
+                if (strcmp(user.id, in_id) == 0 && strcmp(user.password, in_pw) == 0)    //  구조체 아이디 비버ㄴ 비교
+                {
+                    fclose(fp);
+                    write(clnt_sock, "로그인 성공\n", strlen("로그인 성공\n"));
+					read(clnt_sock, cnt, sizeof(cnt));
+                    break;
+                }               
+            }
+
+
+			
+
+
+
 		}
 		else
 		{

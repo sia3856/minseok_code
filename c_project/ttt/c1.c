@@ -1,165 +1,88 @@
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h> 
 #include <string.h>
-#include <time.h>
-#include <sys/socket.h>
-#include <sys/msg.h>
-#include <sys/ipc.h>
-#include <netdb.h>
 #include <arpa/inet.h>
-#include <netinet/in.h>
+#include <sys/socket.h>
 #include <pthread.h>
-#define MAX_USER_NUM 5
-#define MAX_NICK_LEN 30
-#define MAX_MESSAGE_LEN 1024
-
-#define SERV_IP "127.0.0.1"
-#define SERV_PORT 10200
-
-typedef struct _user
+	
+#define BUF_SIZE 100
+#define NAME_SIZE 20
+	
+void * send_msg(void * arg);
+void * recv_msg(void * arg);
+void error_handling(char * msg);
+	
+char name[NAME_SIZE]="[DEFAULT]";
+char msg[BUF_SIZE];
+	
+int main(int argc, char *argv[])
 {
-    int usd;
-    int unum;
-    int rsd;
-    char unick[MAX_NICK_LEN];
-} User;
-
-typedef struct _room
-{
-    int rsd;
-    int usd[5];
-    int ucnt;
-} Room;
-User list[5];
-
-int sd;
-int rsd;
-int flag = 0;
-int rcnt = 0;
-int usernum = 0;
-pthread_mutex_t usermutex;
-
-void SigExit(int signo);
-int SockSetting(char *ip, int port);
-void JoinChat(int ssd);
-void *RecvMsg(void *user);
-void *SendMsg(void *user);
-void *thrdmain(void *us);
-
-int main()
-{
-    int port;
-    char pt[MAX_MESSAGE_LEN];
-
-    printf("포트를 입력하세요 :");
-    scanf("%d", &port);
-    getchar();
-    signal(SIGINT, SigExit);
-
-    pthread_mutex_init(&usermutex, NULL);
-
-    if ((sd = SockSetting(SERV_IP, port)) == -1)
-    {
-        perror("socket");
-        return 0;
-    }
-
-    JoinChat(sd);
-
-    return 0;
+	int sock;
+	struct sockaddr_in serv_addr;
+	pthread_t snd_thread, rcv_thread;
+	void * thread_return;
+	if(argc!=4) {
+		printf("Usage : %s <IP> <port> <name>\n", argv[0]);
+		exit(1);
+	 }
+	
+	sprintf(name, "[%s]", argv[3]);
+	sock=socket(PF_INET, SOCK_STREAM, 0);
+	
+	memset(&serv_addr, 0, sizeof(serv_addr));
+	serv_addr.sin_family=AF_INET;
+	serv_addr.sin_addr.s_addr=inet_addr(argv[1]);
+	serv_addr.sin_port=htons(atoi(argv[2]));
+	  
+	if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr))==-1)
+		error_handling("connect() error");
+	
+	pthread_create(&snd_thread, NULL, send_msg, (void*)&sock);
+	pthread_create(&rcv_thread, NULL, recv_msg, (void*)&sock);
+	pthread_join(snd_thread, &thread_return);
+	pthread_join(rcv_thread, &thread_return);
+	close(sock);  
+	return 0;
 }
-
-void JoinChat(int ssd)
+	
+void * send_msg(void * arg)   // send thread main
 {
-    User user;
-    pthread_t ptr[2];
-    char nick[MAX_NICK_LEN] = "";
-    char rbuf[MAX_MESSAGE_LEN] = "";
-
-    recv(ssd, rbuf, 100, 0);
-    fputs(rbuf, stdout);
-    fgets(nick, sizeof(nick), stdin);
-    send(ssd, nick, strlen(nick), 0);
-    user.usd = ssd;
-    strcmp(user.unick, nick);
-
-    pthread_create(&ptr[0], NULL, RecvMsg, &user);
-    pthread_detach(ptr[0]);
-    pthread_create(&ptr[1], NULL, SendMsg, &user);
-    pthread_detach(ptr[1]);
-
-    while (1)
-        pause();
+	int sock=*((int*)arg);
+	char name_msg[NAME_SIZE+BUF_SIZE];
+	while(1) 
+	{
+		fgets(msg, BUF_SIZE, stdin);
+		if(!strcmp(msg,"q\n")||!strcmp(msg,"Q\n")) 
+		{
+			close(sock);
+			exit(0);
+		}
+		sprintf(name_msg,"%s %s", name, msg);
+		write(sock, name_msg, strlen(name_msg));
+	}
+	return NULL;
 }
-
-void *RecvMsg(void *user)
+	
+void * recv_msg(void * arg)   // read thread main
 {
-    User us = *(User *)user;
-    char rbuf[MAX_MESSAGE_LEN];
-
-    while (1)
-    {
-        if (flag == 0)
-        {
-            recv(us.usd, rbuf, sizeof(rbuf), 0);
-        }
-        while (recv(us.usd, rbuf, sizeof(rbuf), 0) > 0)
-        {
-            fputs(rbuf, stdout);
-            memset(rbuf, 0, sizeof(rbuf));
-        }
-    }
+	int sock=*((int*)arg);
+	char name_msg[NAME_SIZE+BUF_SIZE];
+	int str_len;
+	while(1)
+	{
+		str_len=read(sock, name_msg, NAME_SIZE+BUF_SIZE-1);
+		if(str_len==-1) 
+			return (void*)-1;
+		name_msg[str_len]=0;
+		fputs(name_msg, stdout);
+	}
+	return NULL;
 }
-
-void *SendMsg(void *user)
+	
+void error_handling(char *msg)
 {
-    User us = *(User *)user;
-    char sbuf[MAX_MESSAGE_LEN];
-
-    while (1)
-    {
-        fgets(sbuf, sizeof(sbuf), stdin);
-        send(us.usd, sbuf, sizeof(sbuf), 0);
-        if (!strncmp(sbuf, "/f", 2))
-            flag = 1;
-
-        memset(sbuf, 0, sizeof(sbuf));
-    }
-}
-
-int SockSetting(char *ip, int port)
-{
-    int ssd;
-
-    if ((ssd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-    {
-        perror("sock error");
-        return -1;
-    }
-
-    struct sockaddr_in servaddr = {0};
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = inet_addr(ip);
-    servaddr.sin_port = htons(port);
-
-    if (connect(ssd, (struct sockaddr *)&servaddr, sizeof(servaddr)) == -1)
-    {
-        perror("connect");
-        return -1;
-    }
-
-    return ssd;
-}
-
-void SigExit(int signo)
-{
-    printf("클라이언트를 종료합니다.\n");
-    close(sd);
-    exit(0);
+	fputs(msg, stderr);
+	fputc('\n', stderr);
+	exit(1);
 }

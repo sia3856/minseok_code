@@ -11,8 +11,11 @@
 #define MAX_CLNT 256
 
 void *handle_clnt(void *arg);
-void send_msg(char *msg, int len);
+void send_msg(char *msg, int len, int ucnt);
 void error_handling(char *msg);
+
+#define yellow	"\033[38;2;255;255;0m"
+#define end	"\033[0m"
 
 int clnt_cnt = 0;
 int clnt_socks[MAX_CLNT];
@@ -25,11 +28,13 @@ typedef struct user
 	char password[20];
 	char phone[20];
 	char nick[20];
+	int sok;
+	int rsok;
 } User;
 
-User u_list[10] = {{0,"siasia","siasia","010-0000-0000","시아"},{0,"kim123","1234","010-1111-1111","kim"}};
+User u_list[10] = {{0,"siasia","siasia","010-0000-0000","시아"},{0,"kim123","1234","010-1111-1111","kim"},{0,"k123","1234","010-1111-1111","cha"}};
 
-int r_cnt = 2;
+int r_cnt = 3;
 
 int main(int argc, char *argv[])
 {
@@ -88,6 +93,9 @@ void *handle_clnt(void *arg)
 	int id_st = 0;
 	char result[20];
 	int j= 0;
+	int jcnt = 0;
+	int ucnt = 0;
+	char wel[200];
 
 	while (1)
 	{
@@ -174,13 +182,18 @@ void *handle_clnt(void *arg)
 			in_pw[strlen(in_pw) - 1] = '\0';
 
 			//pthread_mutex_lock(&mutx);
-			for (j = 0; j < r_cnt; j++)
+			for (jcnt = 0; jcnt < r_cnt; jcnt++)
 			{		
-				if (strcmp(u_list[j].id, in_id) == 0 && strcmp(u_list[j].password, in_pw) == 0)// && u_list[j].sta != 2
+				if (strcmp(u_list[jcnt].id, in_id) == 0 && strcmp(u_list[jcnt].password, in_pw) == 0)// && u_list[j].sta != 2
 				{
-					send(clnt_sock, "로그인 성공\n", strlen("로그인 성공\n"),0);					
+					send(clnt_sock, "로그인 성공\n", strlen("로그인 성공\n"),0);
+					sprintf(wel,"%s님 오신걸 환영합니다.\n", u_list[jcnt].nick);
+					write(clnt_sock,wel,strlen(wel));
+					memset(wel,0,sizeof(wel));					
 					login_success = 1; 					
-					u_list[j].sta = 2;					
+					u_list[jcnt].sta = 2;	
+					u_list[jcnt].sok = jcnt;
+					u_list[jcnt].rsok = clnt_sock;				
                     break;
 				}
 				
@@ -276,12 +289,46 @@ void *handle_clnt(void *arg)
             continue;
         }
 	}
-	if(u_list[j].sta == 2)
+	
+	int rlen;
+	char rmsg[BUF_SIZE];
+	char *nick;
+	char *mynick;
+	int sokkkk;
+	char jrmsg[200];
+	if(u_list[jcnt].sta == 2)
 	{
+		ucnt = u_list[jcnt].sok;
 		while ((str_len = read(clnt_sock, msg, sizeof(msg))) != 0)
-		{		
-			//memset(msg,0,sizeof(msg));   //닉네임 추가하면 풀기
-			send_msg(msg, str_len);
+		{	
+			if(strncmp(msg,"/w",2) == 0)  //귓속말
+			{
+				mynick = strtok(msg, " ");
+				nick = strtok(NULL, " ");
+				printf("%s\n",nick);
+				char *jin_msg = strtok(NULL,"\n");
+				printf("%s\n",jin_msg);
+				//strcat(jin_msg,"\n");
+				sprintf(jrmsg,"%s%s <%s> %s%s\n" ,yellow,"귓속말", u_list[jcnt].nick, jin_msg,end);
+				for(i = 0; i< r_cnt; i++)
+				{
+					if(strcmp(u_list[i].nick,nick)==0 )
+					{
+						sokkkk = i;
+						break;
+					}
+				}
+				printf("%d\n",u_list[sokkkk].rsok);
+				printf("%s\n",u_list[sokkkk].nick);
+				write(u_list[sokkkk].rsok, jrmsg,sizeof(jrmsg));
+				printf("\n");
+				memset(jin_msg,0,sizeof(jin_msg));
+				memset(jrmsg,0,sizeof(jrmsg));
+			}
+			else
+			{	
+				send_msg(msg, str_len, ucnt); // 전체 메시지 
+			}
 		}
 	}
 
@@ -302,15 +349,25 @@ void *handle_clnt(void *arg)
 }
 
 
-void send_msg(char *msg, int len) // send to all
+void send_msg(char *msg, int len, int ucnt) // send to all
 {
 	int i;
+	char rmsg[1000];
+	int rlen;
 	pthread_mutex_lock(&mutx);
+	memset(rmsg,0,sizeof(rmsg));
+	rlen = 0;
+	msg[strlen(msg) - 1] = '\0';
+	sprintf(rmsg,"%s>%s\n",u_list[ucnt].nick,msg);
+	printf("%s\n",rmsg);
+
 	for (i = 0; i < clnt_cnt; i++)
 	{
 		if(u_list[i].sta == 2)
 		{
-			write(clnt_socks[i], msg, len);
+			write(clnt_socks[i], rmsg, strlen(rmsg));			
+			memset(msg,0,sizeof(msg));
+			len = 0;
 		}
 	}
 	pthread_mutex_unlock(&mutx);
